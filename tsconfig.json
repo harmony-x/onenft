@@ -21,6 +21,7 @@
       "$layouts/*": ["layouts/*"],
       "$screens/*": ["screens/*"],
       "$svgs/*": ["svgs/*"],
+      "$constants/*": ["constants/*"],
       "$components/*": ["components/*"]
     },
     "incremental": true
