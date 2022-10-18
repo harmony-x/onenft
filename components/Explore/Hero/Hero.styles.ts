@@ -2,7 +2,13 @@ import { BREAKPOINTS } from "$constants/breakpoints";
 import styled from "styled-components";
 
 export const StyledHero = styled.section`
-  padding: 55px 0 100px 0;
+  padding: 31px 0 42px 0;
+  @media screen and (${BREAKPOINTS.sm}) {
+    padding: 45px 0 60px 0;
+  }
+  @media screen and (${BREAKPOINTS.lg}) {
+    padding: 55px 0 100px 0;
+  }
 `;
 
 export const HeroHeading = styled.h1`
