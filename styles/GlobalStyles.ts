@@ -21,11 +21,32 @@ export const GlobalStyles = createGlobalStyle`
   p {
     margin: 0;
   }
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+  }
 
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+      &::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+      }
+      &::-webkit-scrollbar-button {
+        width: 0;
+        height: 0;
+      }
+      &::-webkit-scrollbar-thumb {
+        border-radius: 50px;
+        background: #2D2F43;
+      }
+      &::-webkit-scrollbar-thumb:active {
+        background: #2D2F43;
+      }
+      &::-webkit-scrollbar-track {
+        border-radius: 53px;
+      }
   }
   button {
     outline: none;
