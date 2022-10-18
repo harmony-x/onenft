@@ -7,4 +7,6 @@ export type IButtonProps = ButtonProps & {
   height?: CSSTypes.Property.Height;
   color?: CSSTypes.Property.Color;
   bgImage?: CSSTypes.Property.BackgroundImage;
+  bgColor?: CSSTypes.Property.BackgroundColor;
+  border?: CSSTypes.Property.Border;
 };
