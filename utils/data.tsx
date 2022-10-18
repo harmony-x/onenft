@@ -117,3 +117,60 @@ export const explore = [
     time: "2d 14h 20m",
   },
 ];
+
+export const hotCollections = [
+  {
+    image: "",
+    name: "Melody NFT",
+    price: 100,
+    id: 1,
+  },
+  {
+    image: "",
+    name: "Melody NFT",
+    price: 100,
+    id: 2,
+  },
+  {
+    image: "",
+    name: "Melody NFT",
+    price: 100,
+    id: 3,
+  },
+  {
+    image: "",
+    name: "Melody NFT",
+    price: 100,
+    id: 4,
+  },
+  {
+    image: "",
+    name: "Melody NFT",
+    price: 100,
+    id: 5,
+  },
+  {
+    image: "",
+    name: "Melody NFT",
+    price: 100,
+    id: 6,
+  },
+  {
+    image: "",
+    name: "Melody NFT",
+    price: 100,
+    id: 7,
+  },
+  {
+    image: "",
+    name: "Melody NFT",
+    price: 100,
+    id: 8,
+  },
+  {
+    image: "",
+    name: "Melody NFT",
+    price: 100,
+    id: 9,
+  },
+];
