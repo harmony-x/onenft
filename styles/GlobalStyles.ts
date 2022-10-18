@@ -18,6 +18,9 @@ export const GlobalStyles = createGlobalStyle`
       color: rgba(5, 212, 182, 0.67);
     }
   }
+  p {
+    margin: 0;
+  }
 
   * {
     box-sizing: border-box;
