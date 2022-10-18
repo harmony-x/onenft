@@ -1,4 +1,6 @@
+import Category from "$components/Explore/Category/Category";
 import Hero from "$components/Explore/Hero/Hero";
+import HotCollections from "$components/Explore/HotCollections/HotCollections";
 import MainLayout from "$layouts/MainLayout/MainLayout";
 import { HarmonyShards, Key } from "harmony-marketplace-sdk";
 import type { NextPage } from "next";
@@ -15,6 +17,8 @@ const Home: NextPage = () => {
       </Head>
       <MainLayout>
         <Hero />
+        <HotCollections />
+        <Category />
       </MainLayout>
       {/* <><ConnectButton /></> */}
     </div>
