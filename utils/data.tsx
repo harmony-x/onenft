@@ -74,3 +74,46 @@ export const socialLinks: Social[] = [
     link: "medium.com",
   },
 ];
+
+export const explore = [
+  {
+    creatorName: "Hilary Rose",
+    creatorImage: "/hillary.png",
+    itemImage: "/primate.png",
+    itemTitle: "Space Hoops #1022",
+    currentBid: 10,
+    time: "2d 14h 20m",
+  },
+  {
+    creatorName: "Hilary Rose",
+    creatorImage: "/hillary.png",
+    itemImage: "/primate.png",
+    itemTitle: "Space Hoops #1022",
+    currentBid: 10,
+    time: "2d 14h 20m",
+  },
+  {
+    creatorName: "PrimatesXX",
+    creatorImage: null,
+    itemImage: "/primate.png",
+    itemTitle: "Space Hoops #1022",
+    currentBid: 10,
+    time: "2d 14h 20m",
+  },
+  {
+    creatorName: "PrimatesXX",
+    creatorImage: "/hillary.png",
+    itemImage: "/primate.png",
+    itemTitle: "Space Hoops #1022",
+    currentBid: 10,
+    time: "2d 14h 20m",
+  },
+  {
+    creatorName: "Iykee",
+    creatorImage: "/hillary.png",
+    itemImage: "/primate.png",
+    itemTitle: "Space Hoops #1022",
+    currentBid: 10,
+    time: "2d 14h 20m",
+  },
+];
