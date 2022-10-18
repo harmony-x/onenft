@@ -11,6 +11,16 @@ import { useDisconnect } from "wagmi";
 const Home: NextPage = () => {
   const key = new Key(HarmonyShards.SHARD_0);
   const { disconnect } = useDisconnect();
+  // const signer = useSigner();
+  // const o = useProvider();
+  // const provider = signer.data ?? o;
+  // const { address } = useAccount();
+  // // const key = new HDKey(
+  // const hrc20 = new HRC20(new Key(HarmonyShards.SHARD_0, provider));
+  // const anysigner = signer.data!;
+
+  // const key = new Key(window.ethereum!);
+
   return (
     <div>
       <Head>
