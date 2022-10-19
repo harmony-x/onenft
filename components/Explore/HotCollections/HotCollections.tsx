@@ -1,4 +1,7 @@
-import { HeadingTwo } from "$components/App/Typography/Typography.styles";
+import {
+  HeadingFour,
+  HeadingTwo,
+} from "$components/App/Typography/Typography.styles";
 import { FlexibleDiv } from "$components/Box/Box.styles";
 import { Ethereum } from "$svgs/ethereum";
 import { Harmony } from "$svgs/harmony";
@@ -12,7 +15,6 @@ import {
   StyledHotCollectionFloorPrice,
   StyledHotCollectionFloorPriceSVG,
   StyledHotCollectionImage,
-  StyledHotCollectionName,
   StyledHotCollectionNumbering,
   StyledHotCollections,
   StyledHotCollectionsContainer,
@@ -62,7 +64,9 @@ const HotCollections = () => {
                       <Verified />
                     </StyledHotCollectionImage>
                     <div>
-                      <StyledHotCollectionName>{name}</StyledHotCollectionName>
+                      <HeadingFour mb="2px" as="p">
+                        {name}
+                      </HeadingFour>
                       <StyledHotCollectionFloorPrice>
                         Floor price:{" "}
                         <StyledHotCollectionFloorPriceSVG>

@@ -207,22 +207,6 @@ export const StyledHotCollectionImage = styled.div`
   }
 `;
 
-export const StyledHotCollectionName = styled.p`
-  font-weight: 500;
-  font-size: 1.6rem;
-  line-height: 2rem;
-  margin-bottom: 2px;
-  color: rgba(255, 255, 255, 0.87);
-  @media screen and (${BREAKPOINTS.sm}) {
-    font-size: 2.2rem;
-    line-height: 2.4rem;
-  }
-  @media screen and (${BREAKPOINTS.lg}) {
-    font-size: 2.8rem;
-    line-height: 4.8rem;
-  }
-`;
-
 export const StyledHotCollectionFloorPrice = styled.p`
   font-weight: 300;
   font-size: 1rem;
