@@ -2,7 +2,7 @@ import { FlexibleDiv } from "$components/Box/Box.styles";
 import { BREAKPOINTS } from "$constants/breakpoints";
 import styled from "styled-components";
 
-export const StyledItemCard = styled.li`
+export const StyledItemCard = styled.div`
   width: 100%;
   background-color: #2d2f43;
   min-height: 373px;
