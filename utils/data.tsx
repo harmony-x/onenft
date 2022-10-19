@@ -174,3 +174,62 @@ export const hotCollections = [
     id: 9,
   },
 ];
+
+export const activity = [
+  {
+    event: "Transfer",
+    price: 2751.36,
+    from: "0x84f0...2c34",
+    to: "0x84f0...2c34",
+    time: "yesterday",
+    key: 0,
+  },
+  {
+    event: "Listed",
+    price: 2751.36,
+    from: "0x84f0...2c34",
+    to: "-",
+    time: "7 days ago",
+    key: 1,
+  },
+  {
+    event: "Transfer",
+    price: 2022.26,
+    from: "PrimatesXX",
+    to: "0x974...3df6",
+    time: "a month ago",
+    key: 2,
+  },
+  {
+    event: "Transfer",
+    price: 2022.26,
+    from: "PrimatesXX",
+    to: "0x974...3df6",
+    time: "a month ago",
+    key: 3,
+  },
+  {
+    event: "Transfer",
+    price: 2022.26,
+    from: "PrimatesXX",
+    to: "0x974...3df6",
+    time: "a month ago",
+    key: 4,
+  },
+  {
+    event: "Transfer",
+    price: 2022.26,
+    from: "PrimatesXX",
+    to: "0x974...3df6",
+    time: "a month ago",
+    key: 5,
+  },
+  {
+    event: "Transfer",
+    price: 2022.26,
+    from: "PrimatesXX",
+    to: "0x974...3df6",
+    time: "a month ago",
+    key: 6,
+  },
+];
