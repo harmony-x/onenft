@@ -174,3 +174,5 @@ export const hotCollections = [
     id: 9,
   },
 ];
+
+export const accessTokenKey = "oneNFT_accessToken";

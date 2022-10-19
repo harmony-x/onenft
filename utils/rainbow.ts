@@ -1,8 +1,18 @@
 import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultWallets } from "@rainbow-me/rainbowkit";
-import { Chain, chain, configureChains, createClient } from "wagmi";
+import {
+  AuthenticationStatus,
+  createAuthenticationAdapter,
+  getDefaultWallets,
+} from "@rainbow-me/rainbowkit";
+import { SiweMessage } from "siwe";
+import { Chain, configureChains, createClient } from "wagmi";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { HARMONY_RPC_SHARD_0_URL } from "harmony-marketplace-sdk";
+import axios from "axios";
+import { accessTokenKey } from "./data";
+
+// set axios base url
+axios.defaults.baseURL = "http://127.0.0.1:5000";
 
 const harmonyChain = {
   id: 1666600000,
@@ -44,3 +54,66 @@ export const wagmiClient = createClient({
   connectors,
   provider,
 });
+
+export const authenticationAdapter = (
+  setStatus: (status: AuthenticationStatus) => void
+) =>
+  createAuthenticationAdapter({
+    getNonce: async () => {
+      return "100000000";
+    },
+    createMessage: ({ nonce, address, chainId }) => {
+      console.log("createMessage", nonce, address, chainId);
+      return new SiweMessage({
+        domain: window.location.host,
+        address,
+        statement: "Sign in to ONENFT with your wallet.",
+        uri: window.location.origin,
+        version: "1",
+        chainId,
+        nonce,
+      });
+    },
+    getMessageBody: ({ message }) => {
+      return message.prepareMessage();
+    },
+    verify: async ({ message, signature }) => {
+      console.log("verify", message.prepareMessage(), signature);
+      const loginRes = await axios.post("/api/login", {
+        message,
+        signature,
+      });
+      localStorage.setItem(accessTokenKey, loginRes.data.access_token);
+      setStatus("authenticated");
+      return Boolean(loginRes.status === 200);
+    },
+    signOut: async () => {
+      await fetch("/api/logout");
+    },
+  });
+
+// intercept axios response
+axios.interceptors.response.use(
+  (response) => {
+    console.log("axios response", response.config);
+    return response;
+  },
+  (error) => {
+    console.log("axios error", error.config);
+    if (error.config.url === "/api/me" && typeof window !== "undefined") {
+      // remove previous access token and refresh
+      localStorage.removeItem(accessTokenKey);
+      window.location.reload();
+    }
+  }
+);
+
+if (typeof window !== "undefined" && !!localStorage.getItem(accessTokenKey)) {
+  axios.get("/api/me", {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
+    },
+  });
+}
+
+
