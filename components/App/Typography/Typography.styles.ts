@@ -19,3 +19,21 @@ export const HeadingTwo = styled.h2<ITypographyProps>`
     line-height: 6.1rem;
   }
 `;
+
+export const HeadingFour = styled.h4<ITypographyProps>`
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 2rem;
+  margin-bottom: 2px;
+  color: rgba(255, 255, 255, 0.87);
+  margin-bottom: ${({ mb }) => mb};
+  text-align: ${({ textAlign }) => textAlign};
+  @media screen and (${BREAKPOINTS.sm}) {
+    font-size: 2.2rem;
+    line-height: 2.4rem;
+  }
+  @media screen and (${BREAKPOINTS.lg}) {
+    font-size: 2.8rem;
+    line-height: 4.8rem;
+  }
+`;
