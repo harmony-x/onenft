@@ -233,3 +233,4 @@ export const activity = [
     key: 6,
   },
 ];
+export const accessTokenKey = "oneNFT_accessToken";
