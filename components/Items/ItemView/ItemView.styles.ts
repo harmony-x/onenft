@@ -17,25 +17,13 @@ export const StyledItemView = styled(FlexibleDiv)`
   @media screen and (${BREAKPOINTS.lg}) {
     flex-direction: row;
   }
-  svg {
-    width: 18px;
-    height: 18px;
-    @media screen and (${BREAKPOINTS.md}) {
-      width: 24px;
-      height: 24px;
-    }
-    @media screen and (${BREAKPOINTS.lg}) {
-      width: 38px;
-      height: 38px;
-    }
-  }
 `;
 
 export const StyledItemViewImage = styled.div`
   position: relative;
   height: 258px;
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   border-radius: 30px;
   img {
     border-radius: 30px;
@@ -102,14 +90,31 @@ export const ItemViewTab = styled(Tabs)`
       margin-bottom: 24px;
     }
   }
+  .ant-tabs-tabpane {
+    font-weight: 300;
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+    color: rgba(255, 255, 255, 0.67);
+    @media screen and (${BREAKPOINTS.sm}) {
+      font-size: 1.8rem;
+      line-height: 2.2rem;
+    }
+    @media screen and (${BREAKPOINTS.lg}) {
+      font-size: 2rem;
+      line-height: 2.8rem;
+    }
+  }
 `;
 
 export const StyledItemViewContentText = styled.p<IStyledItemViewContentTextProps>`
   font-weight: 300;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   line-height: 1.8rem;
   color: rgba(255, 255, 255, 0.67);
   margin-bottom: ${({ mb }) => mb};
+  &.owner {
+    margin-bottom: 20px;
+  }
   .span {
     color: rgba(255, 255, 255, 0.87);
   }
@@ -118,12 +123,54 @@ export const StyledItemViewContentText = styled.p<IStyledItemViewContentTextProp
     line-height: 2.4rem;
   }
   @media screen and (${BREAKPOINTS.lg}) {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     line-height: 2.8rem;
+    &.owner {
+      margin-bottom: 40px;
+    }
   }
 `;
 
 export const ItemViewButton = styled(Button)`
   width: 100%;
   max-width: 185px;
+`;
+
+export const ItemViewPrice = styled(FlexibleDiv)`
+  gap: 6px;
+  margin-bottom: 20px;
+  &.small {
+    margin-bottom: 0;
+  }
+  svg {
+    width: 16px;
+    height: 16px;
+    &.svg {
+      width: 10px;
+      height: 10px;
+    }
+    @media screen and (${BREAKPOINTS.md}) {
+      width: 24px;
+      height: 24px;
+      &.small {
+        width: 12px;
+        height: 12px;
+      }
+    }
+    @media screen and (${BREAKPOINTS.lg}) {
+      width: 30px;
+      height: 30px;
+      &.small {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+  @media screen and (${BREAKPOINTS.sm}) {
+    gap: 8px;
+  }
+  @media screen and (${BREAKPOINTS.lg}) {
+    gap: 12px;
+    margin-bottom: 31px;
+  }
 `;
