@@ -6,6 +6,7 @@ import { BREAKPOINTS } from "$constants/breakpoints";
 export const Button = styled(AntdBtn)<IButtonProps>`
   height: ${({ height }) => height ?? "48px"};
   width: ${({ width }) => width ?? "auto"};
+  max-width: ${({ maxWidth }) => maxWidth ?? "auto"};
   margin-bottom: ${({ mb }) => mb};
   display: flex;
   align-items: center;
