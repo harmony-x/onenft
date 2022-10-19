@@ -1,10 +1,14 @@
 import { FlexibleDiv } from "$components/Box/Box.styles";
 import { BREAKPOINTS } from "$constants/breakpoints";
 import styled from "styled-components";
+import { ICreatorDisplayProps } from "./CreatorDisplay.types";
 
-export const CreatorDisplayContainer = styled(FlexibleDiv)`
+export const CreatorDisplayContainer = styled(FlexibleDiv)<
+  Pick<ICreatorDisplayProps, "mb">
+>`
   padding: 6px;
-  max-width: 72px;
+  min-width: 72px;
+  width: max-content;
   min-height: 22px;
   font-weight: 300;
   font-size: 1rem;
@@ -15,8 +19,9 @@ export const CreatorDisplayContainer = styled(FlexibleDiv)`
   backdrop-filter: blur(5px);
   border-radius: 100px;
   word-break: break-all;
+  margin-bottom: ${({ mb }) => mb};
   @media screen and (${BREAKPOINTS.sm}) {
-    max-width: 157px;
+    min-width: 157px;
     min-height: 48px;
     font-size: 1.4rem;
     line-height: 1.8rem;
