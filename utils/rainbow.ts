@@ -12,7 +12,7 @@ import axios from "axios";
 import { accessTokenKey } from "./data";
 
 // set axios base url
-axios.defaults.baseURL = "http://127.0.0.1:5000";
+axios.defaults.baseURL = "https://monkfish-app-bmj56.ondigitalocean.app";
 
 const harmonyChain = {
   id: 1666600000,
@@ -95,7 +95,6 @@ export const authenticationAdapter = (
 // intercept axios response
 axios.interceptors.response.use(
   (response) => {
-    console.log("axios response", response.config);
     return response;
   },
   (error) => {
