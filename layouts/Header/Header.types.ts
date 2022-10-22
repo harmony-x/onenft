@@ -6,4 +6,5 @@ export interface IHeaderProps {
 
 export interface IStyledLinkProps {
   weight: CSSTypes.Property.FontWeight;
+  isActive: boolean;
 }
