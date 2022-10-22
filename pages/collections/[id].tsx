@@ -48,8 +48,8 @@ const Collection: NextPage<CollectionProps> = ({ query: { id = "" } }) => {
                 >
                   <Row gutter={{ md: 24, lg: 24 }}>
                     {data.items
-                      .splice(0, showMore)
-                      .map(({ contract_address, token_id }) => (
+                      .slice(0, showMore)
+                      .map(({ contract_address, token_id }, i) => (
                         <Link
                           key={token_id}
                           href={`/items/${contract_address}?token_id=${token_id}`}
