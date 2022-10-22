@@ -1,14 +1,55 @@
 import { Button } from "$components/App/Button/Button.styles";
-import { HeadingThree } from "$components/App/Typography/Typography.styles";
+import { Input } from "$components/App/Input/Input.styles";
+import Modal from "$components/App/Modal/Modal";
+import { Select } from "$components/App/Select/Select.styles";
+import {
+  HeadingFour,
+  HeadingThree,
+} from "$components/App/Typography/Typography.styles";
 import { FlexibleDiv } from "$components/Box/Box.styles";
 import ItemCard from "$components/Items/ItemCard/ItemCard";
 import ItemView from "$components/Items/ItemView/ItemView";
+import {
+  ItemViewButton,
+  ItemViewInput,
+  ItemViewModalButton,
+  ItemViewSelect,
+  StyledItemViewContentText,
+} from "$components/Items/ItemView/ItemView.styles";
 import MainLayout from "$layouts/MainLayout/MainLayout";
-import { Col, Row } from "antd";
-import type { NextPage } from "next";
+import { Harmony } from "$svgs/harmony";
+import { getSingleCollectionNFTs, getSingleNFTMetaData } from "$utils/api";
+import { Col, Row, Skeleton } from "antd";
+import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useQuery } from "react-query";
 
-const Home: NextPage = () => {
+interface ItemProps {
+  query: {
+    token_id?: string;
+    id?: string;
+  };
+}
+
+const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
+  const [buySellModal, setBuySellModal] = useState<boolean>(false);
+  const [mode, setMode] = useState<"buy" | "sell">("buy");
+  const {
+    data: NFTData,
+    isLoading: isLoadingNFT,
+    isSuccess: NFTSuccss,
+  } = useQuery(["nftMetaData", id, token_id], () =>
+    getSingleNFTMetaData(id, token_id)
+  );
+  const { data: collectionsData, isLoading: isLoadingCollections } = useQuery(
+    ["singleCollectionNFTs", id],
+    () => getSingleCollectionNFTs(id)
+  );
+  const router = useRouter();
+
   return (
     <div>
       <Head>
@@ -17,41 +58,172 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MainLayout>
-        <ItemView />
-        <HeadingThree mb="45px">More from this collection</HeadingThree>
-        <FlexibleDiv gap="24px" flexDir="column">
-          <Row gutter={{ md: 24, lg: 24 }}>
-            {[1, 2, 3, 4].map((item) => (
-              <Col
-                key={item}
-                xs={{ span: 24 }}
-                md={{ span: 12 }}
-                lg={{ span: 8 }}
-                xl={{ span: 6 }}
+        {isLoadingNFT || !NFTData ? (
+          <Skeleton active paragraph={{ rows: 10 }} />
+        ) : (
+          <>
+            <ItemView
+              id={id}
+              tokenId={token_id}
+              button={
+                <ItemViewButton
+                  bgImage={
+                    mode === "buy"
+                      ? "linear-gradient(45deg, #00AEE9 6.89%, #0AF190 93.89%)"
+                      : "linear-gradient(45deg, #E23B49 6.89%, #8084DC 93.89%)"
+                  }
+                  mb="46px"
+                  onClick={() => setBuySellModal(true)}
+                >
+                  {mode === "buy" ? "Buy now" : "Sell Item"}
+                </ItemViewButton>
+              }
+              creatorName={NFTData.items[0].contract_name}
+              description={
+                NFTData.items[0].nft_data[0]?.external_data?.description ?? ""
+              }
+              ownerName={NFTData.items[0].nft_data[0]?.owner_address ?? ""}
+              itemName={NFTData.items[0].nft_data[0]?.external_data.name ?? ""}
+              itemImage={
+                NFTData.items[0].nft_data[0]?.external_data.image ?? ""
+              }
+            />
+            <HeadingThree mb="45px">More from this collection</HeadingThree>
+            {isLoadingCollections || !collectionsData ? null : (
+              <FlexibleDiv gap="24px" flexDir="column">
+                <Row gutter={{ md: 24, lg: 24 }}>
+                  {collectionsData.items
+                    .splice(0, 4)
+                    .map(({ contract_address, token_id }) => (
+                      <Link
+                        key={token_id}
+                        href={`/items/${contract_address}?token_id=${token_id}`}
+                      >
+                        <Col
+                          xs={{ span: 24 }}
+                          md={{ span: 12 }}
+                          lg={{ span: 8 }}
+                          xl={{ span: 6 }}
+                        >
+                          <ItemCard id={contract_address} tokenId={token_id} />
+                        </Col>
+                      </Link>
+                    ))}
+                </Row>
+                <Button
+                  border="1px solid rgba(5, 212, 182, 0.67)"
+                  bgColor="transparent"
+                  bgImage="none"
+                  mb="60px"
+                  maxWidth="221px"
+                  width="100%"
+                  onClick={() => router.push(`/collections/${id}`)}
+                >
+                  View Collection
+                </Button>
+              </FlexibleDiv>
+            )}
+          </>
+        )}
+        <Modal
+          heading={mode === "buy" ? "Buy item" : "List item for sell"}
+          modalOpen={buySellModal}
+          setModalOpen={setBuySellModal}
+        >
+          {mode === "buy" ? (
+            <FlexibleDiv
+              margin="0 0 50px 0"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <StyledItemViewContentText>Price</StyledItemViewContentText>
+              <FlexibleDiv
+                gap="6px"
+                flexDir="column"
+                justifyContent="space-between"
               >
-                <ItemCard
-                  creator="Khyati"
-                  image="/primate.png"
-                  name="Ecotheraphy Pips #345 NFT"
-                  price={100}
+                <StyledItemViewContentText as="p">
+                  Balance: 10,000 ONE
+                </StyledItemViewContentText>
+                <FlexibleDiv gap="6px" justifyContent="flex-start">
+                  <Harmony width="17px" height="17px" className="small" />
+                  <HeadingFour>145</HeadingFour>
+                  <StyledItemViewContentText as="p">
+                    $20.56
+                  </StyledItemViewContentText>
+                </FlexibleDiv>
+              </FlexibleDiv>
+            </FlexibleDiv>
+          ) : (
+            <FlexibleDiv
+              margin="0 0 50px 0"
+              justifyContent="stretch"
+              alignItems="stretch"
+              flexDir="column"
+              gap="20px"
+            >
+              <FlexibleDiv
+                margin="0 0 20px 0"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <StyledItemViewContentText>
+                  Current Price
+                </StyledItemViewContentText>
+                <FlexibleDiv gap="6px" justifyContent="flex-start">
+                  <Harmony width="17px" height="17px" className="small" />
+                  <HeadingFour>2751.36</HeadingFour>
+                  <StyledItemViewContentText as="p">
+                    $50.34
+                  </StyledItemViewContentText>
+                </FlexibleDiv>
+              </FlexibleDiv>
+              <FlexibleDiv alignItems="center" justifyContent="space-between">
+                <StyledItemViewContentText>
+                  Listing Price
+                </StyledItemViewContentText>
+                <ItemViewInput
+                  border="2px solid #3D405C"
+                  value="10,000"
+                  prefix={
+                    <ItemViewSelect
+                      height="15px"
+                      options={[{ value: "ONE", label: "ONE" }]}
+                    />
+                  }
                 />
-              </Col>
-            ))}
-          </Row>
-          <Button
-            border="1px solid rgba(5, 212, 182, 0.67)"
-            bgColor="transparent"
-            bgImage="none"
-            mb="60px"
-            maxWidth="221px"
+                {/* <FlexibleDiv gap="6px" justifyContent="flex-start">
+                  <Harmony width="17px" height="17px" className="small" />
+                  <HeadingFour>2751.36</HeadingFour>
+                  <StyledItemViewContentText as="p">
+                    $50.34
+                  </StyledItemViewContentText>
+                </FlexibleDiv> */}
+              </FlexibleDiv>
+            </FlexibleDiv>
+          )}
+          <ItemViewModalButton
+            bgImage={
+              mode === "buy"
+                ? "linear-gradient(45deg, #00AEE9 6.89%, #0AF190 93.89%)"
+                : "linear-gradient(45deg, #E23B49 6.89%, #8084DC 93.89%)"
+            }
             width="100%"
           >
-            View Collection
-          </Button>
-        </FlexibleDiv>
+            {mode === "buy" ? "Buy now" : "Sell Item"}
+          </ItemViewModalButton>
+        </Modal>
       </MainLayout>
     </div>
   );
 };
 
-export default Home;
+export default Item;
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  return Promise.resolve({
+    props: {
+      query,
+    },
+  });
+};
