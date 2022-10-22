@@ -105,7 +105,7 @@ interface UserRequest {
   profile_picture: string;
 }
 
-interface Collection {
+export interface Collection {
   address: string;
   category: Category;
   description: string;
@@ -122,7 +122,7 @@ interface Collection {
   website: string;
 }
 
-interface UserResponse {
+export interface UserResponse {
   active: boolean;
   address: string;
   name: string;
