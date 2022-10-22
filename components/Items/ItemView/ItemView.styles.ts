@@ -1,4 +1,6 @@
 import { Button } from "$components/App/Button/Button.styles";
+import { Input } from "$components/App/Input/Input.styles";
+import { Select } from "$components/App/Select/Select.styles";
 import { FlexibleDiv } from "$components/Box/Box.styles";
 import { BREAKPOINTS } from "$constants/breakpoints";
 import { Tabs } from "antd";
@@ -119,7 +121,7 @@ export const StyledItemViewContentText = styled.p<IStyledItemViewContentTextProp
     color: rgba(255, 255, 255, 0.87);
   }
   @media screen and (${BREAKPOINTS.sm}) {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     line-height: 2.4rem;
   }
   @media screen and (${BREAKPOINTS.lg}) {
@@ -134,6 +136,13 @@ export const StyledItemViewContentText = styled.p<IStyledItemViewContentTextProp
 export const ItemViewButton = styled(Button)`
   width: 100%;
   max-width: 185px;
+`;
+
+export const ItemViewModalButton = styled(Button)`
+  height: 48px;
+  @media screen and (${BREAKPOINTS.lg}) {
+    height: 60px;
+  }
 `;
 
 export const ItemViewPrice = styled(FlexibleDiv)`
@@ -172,5 +181,30 @@ export const ItemViewPrice = styled(FlexibleDiv)`
   @media screen and (${BREAKPOINTS.lg}) {
     gap: 12px;
     margin-bottom: 31px;
+  }
+`;
+
+export const ItemViewInput = styled(Input)`
+  height: 25px;
+  padding: 10px 11px;
+  width: 60%;
+  max-width: 300px;
+  .ant-input-prefix {
+    margin-right: 0;
+  }
+  @media screen and (${BREAKPOINTS.lg}) {
+    height: 30px;
+  }
+`;
+
+export const ItemViewSelect = styled(Select)`
+  width: 100%;
+  height: 20px;
+  padding: 6px 7px;
+  max-width: 200px;
+  border: 0;
+  border-radius: 0;
+  @media screen and (${BREAKPOINTS.lg}) {
+    height: 20px;
   }
 `;
