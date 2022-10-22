@@ -2,8 +2,8 @@ import { BREAKPOINTS } from "$constants/breakpoints";
 import styled from "styled-components";
 
 export const StyledAvartar = styled.button`
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   border: 4px solid #ffffff;
   position: relative;
   cursor: pointer;
@@ -11,6 +11,7 @@ export const StyledAvartar = styled.button`
   -webkit-user-select: none;
   border-radius: 50%;
   margin: 0;
+  overflow: hidden;
   img {
     border-radius: 50%;
   }
@@ -25,8 +26,8 @@ export const StyledAvartar = styled.button`
     background-color: #ffffff;
   }
   @media screen and (${BREAKPOINTS.sm}) {
-    width: 156px;
-    height: 156px;
+    width: 186px;
+    height: 186px;
     border: 6px solid #ffffff;
   }
   @media screen and (${BREAKPOINTS.lg}) {
