@@ -109,9 +109,9 @@ const ExploreSlider = () => {
                   <ExploreCardInfo>
                     <CreatorDisplay
                       name={
-                        creatorName.length < 5
+                        creatorName.length < 20
                           ? creatorName
-                          : applyEllipsis(creatorName, 6).replace("...", "")
+                          : applyEllipsis(creatorName, 6)
                       }
                       img={creatorImage}
                     />
@@ -129,7 +129,9 @@ const ExploreSlider = () => {
               )
             )}
           </StyledExploreSliderInner>
-        ) : null}
+        ) : (
+          <StyledExploreSliderInner transform={0} width="100%" />
+        )}
       </StyledExploreSliderOuter>
     </StyledExploreSlider>
   );
