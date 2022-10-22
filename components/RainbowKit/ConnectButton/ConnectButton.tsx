@@ -1,11 +1,20 @@
 import { Button } from "$components/App/Button/Button.styles";
+import UserDropdown from "$components/App/UserDropdown/UserDropdown";
+import { FlexibleDiv } from "$components/Box/Box.styles";
 import { ArrowDown } from "$svgs/arrow-down";
+import { getProfile } from "$utils/api";
 import { applyEllipsis } from "$utils/functions";
 import { ConnectButton as RainbowKitConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
-import { ChainButton } from "./ConnectButton.styles";
+import { useQuery } from "react-query";
+import { ChainButton, ProfileAvartar } from "./ConnectButton.styles";
 
 const ConnectButton = () => {
+  const { data: profileData, isLoading: isLoadingProfile } = useQuery(
+    ["userProfile"],
+    getProfile
+  );
+
   return (
     <RainbowKitConnectButton.Custom>
       {({
@@ -56,7 +65,11 @@ const ConnectButton = () => {
                 );
               }
               return (
-                <div style={{ display: "flex", gap: 12 }}>
+                <FlexibleDiv
+                  justifyContent="flex-start"
+                  alignItems="center"
+                  gap="12px"
+                >
                   <ChainButton
                     alignItems="center"
                     gap="9px"
@@ -98,13 +111,29 @@ const ConnectButton = () => {
                     {/* {chain.name} */}
                     <ArrowDown />
                   </ChainButton>
+                  <UserDropdown>
+                    <ProfileAvartar>
+                      <Image
+                        alt=""
+                        placeholder="blur"
+                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPkE+WrBwABHACybY9s4AAAAABJRU5ErkJggg=="
+                        src={
+                          profileData?.profile_picture ??
+                          "/default-profile.jpeg"
+                        }
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    </ProfileAvartar>
+                  </UserDropdown>
+
                   {/* <button onClick={openAccountModal} type="button">
                     {account.displayName}
                     {account.displayBalance
                       ? ` (${account.displayBalance})`
                       : ""}
                   </button> */}
-                </div>
+                </FlexibleDiv>
               );
             })()}
           </div>
