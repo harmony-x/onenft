@@ -16,3 +16,22 @@ export const splitArrToChunks = <T>(perChunk: number, inputArr: T[]) => {
   }, []);
   return result;
 };
+
+export const truncateAddress = (address: string, long = false) => {
+  if (!address) return "No Account";
+  const match = address.match(
+    long
+      ? /^(0x[a-zA-Z0-9]{10})[a-zA-Z0-9]+([a-zA-Z0-9]{3})$/
+      : /^(0x[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/
+  );
+  if (!match) return address;
+  return `${match[1]}…${match[2]}`;
+};
+
+export const getBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
