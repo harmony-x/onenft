@@ -109,7 +109,8 @@ export const InputContainer = styled.div`
 `;
 
 export const StyledLink = styled.a<IStyledLinkProps>`
-  color: rgba(255, 255, 255, 0.87);
+  color: ${({ isActive }) =>
+    isActive ? "rgba(5, 212, 182, 0.67)" : "rgba(255, 255, 255, 0.87)"};
   font-weight: ${({ weight }) => weight ?? "400"};
   font-size: 1.8rem;
   line-height: 2.3rem;
