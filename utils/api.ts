@@ -207,11 +207,14 @@ export const getUsers = async () => {
 export const getUser = async ({ address }: Pick<UserResponse, "address">) => {
   if (typeof window !== "undefined" && !!localStorage.getItem(accessTokenKey)) {
     return await (
-      await oneNFTApiInstance.get<UserResponse>(`/api/user/${address}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
-        },
-      })
+      await oneNFTApiInstance.get<UserResponse>(
+        `/api/user?address=${address}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
+          },
+        }
+      )
     ).data;
   }
 };
@@ -252,11 +255,14 @@ export const getCollection = async ({
 }: Pick<Collection, "address">) => {
   if (typeof window !== "undefined" && !!localStorage.getItem(accessTokenKey)) {
     return await (
-      await oneNFTApiInstance.get<Collection>(`/api/collection/${address}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
-        },
-      })
+      await oneNFTApiInstance.get<Collection>(
+        `/api/collection?address=${address}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
+          },
+        }
+      )
     ).data;
   }
 };
