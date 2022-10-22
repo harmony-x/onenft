@@ -57,6 +57,18 @@ export const GlobalStyles = createGlobalStyle`
     align-items: center;
     cursor: pointer;
   }
+  .ant-modal-centered .ant-modal {
+    width: 90% !important;
+    max-width: 736px !important;
+  }
+  .ant-skeleton-content {
+    margin-top: 50px;
+    display: block;
+  } 
+  .ant-modal-mask {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2.5px);
+  }
 
   /* @media (prefers-color-scheme: dark) {
     html {
