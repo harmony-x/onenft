@@ -14,3 +14,15 @@ export const ChainButton = styled(FlexibleDiv)`
     border-radius: 10px;
   }
 `;
+
+export const ProfileAvartar = styled.div`
+  width: 44px;
+  height: 44px;
+  border: 2px solid #ffffff;
+  position: relative;
+  cursor: pointer;
+  border-radius: 50%;
+  img {
+    border-radius: 50%;
+  }
+`;
