@@ -179,10 +179,68 @@ export const getProfile = async () => {
     ).data;
   }
 };
+
 export const updateProfile = async (user: Partial<UserRequest>) => {
   if (typeof window !== "undefined" && !!localStorage.getItem(accessTokenKey)) {
     return await (
       await oneNFTApiInstance.patch<UserResponse>("/api/me", user, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
+        },
+      })
+    ).data;
+  }
+};
+
+export const getUsers = async () => {
+  if (typeof window !== "undefined" && !!localStorage.getItem(accessTokenKey)) {
+    return await (
+      await oneNFTApiInstance.get<UserResponse[]>("/api/users", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
+        },
+      })
+    ).data;
+  }
+};
+
+export const postCollection = async ({
+  address,
+  ...body
+}: Omit<Collection, "owner">) => {
+  if (typeof window !== "undefined" && !!localStorage.getItem(accessTokenKey)) {
+    return await (
+      await oneNFTApiInstance.post<Collection>(
+        `/api/collections/${address}`,
+        body,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
+          },
+        }
+      )
+    ).data;
+  }
+};
+
+export const getCollections = async () => {
+  if (typeof window !== "undefined" && !!localStorage.getItem(accessTokenKey)) {
+    return await (
+      await oneNFTApiInstance.get<Collection[]>("/api/collections", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
+        },
+      })
+    ).data;
+  }
+};
+
+export const getCollection = async ({
+  address,
+}: Pick<Collection, "address">) => {
+  if (typeof window !== "undefined" && !!localStorage.getItem(accessTokenKey)) {
+    return await (
+      await oneNFTApiInstance.get<Collection>(`/api/collection/${address}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
         },
