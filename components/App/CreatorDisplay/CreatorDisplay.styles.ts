@@ -6,9 +6,8 @@ import { ICreatorDisplayProps } from "./CreatorDisplay.types";
 export const CreatorDisplayContainer = styled(FlexibleDiv)<
   Pick<ICreatorDisplayProps, "mb">
 >`
-  padding: 6px;
-  min-width: 72px;
-  width: max-content;
+  padding: 6px 20px 6px 6px;
+  width: fit-content;
   min-height: 22px;
   font-weight: 300;
   font-size: 1rem;
@@ -21,7 +20,7 @@ export const CreatorDisplayContainer = styled(FlexibleDiv)<
   word-break: break-all;
   margin-bottom: ${({ mb }) => mb};
   @media screen and (${BREAKPOINTS.sm}) {
-    min-width: 157px;
+    width: fit-content;
     min-height: 48px;
     font-size: 1.4rem;
     line-height: 1.8rem;
