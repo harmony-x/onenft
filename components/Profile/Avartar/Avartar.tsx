@@ -31,7 +31,7 @@ const Avartar = () => {
         src={
           updateProfileData?.profile_picture ??
           getProfileData?.profile_picture ??
-          ""
+          "/default-profile.jpeg"
         }
         layout="fill"
         objectFit="cover"
