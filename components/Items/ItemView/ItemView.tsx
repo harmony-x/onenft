@@ -6,6 +6,9 @@ import {
 } from "$components/App/Typography/Typography.styles";
 import { FlexibleDiv } from "$components/Box/Box.styles";
 import { Harmony } from "$svgs/harmony";
+import { Web3Provider } from "@ethersproject/providers";
+import { useWeb3React } from "@web3-react/core";
+import { marketContract } from "contract-factory";
 import Image from "next/image";
 import {
   ItemViewButton,
@@ -17,6 +20,27 @@ import {
 } from "./ItemView.styles";
 
 const ItemView = () => {
+  const { library, account, active } = useWeb3React<Web3Provider>();
+
+  // @akindeji
+  // You can manage the onClick logic else where if needed
+  const onClick = async () => {
+    // remember to check if the user is connected
+    // remember to disable clicking on pressing the button, can enable it in finally block
+    try {
+      const tx = await marketContract(library).buyNft(
+        // put actual nft address
+        "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        // put actual nft id
+        1
+      );
+      // wait for two confirmations
+      await tx.wait(2);
+      // refresh page or something, just make sure new owner shows and all
+    } catch (error) {
+      // handle error, a generic message showing item couldn't be bought works
+    }
+  };
   return (
     <StyledItemView
       as="section"
@@ -42,6 +66,7 @@ const ItemView = () => {
           <HeadingFour>145</HeadingFour>
           <StyledItemViewContentText as="sub">$20.56</StyledItemViewContentText>
         </FlexibleDiv>
+        {/* Check other buy conditions here */}
         <ItemViewButton mb="46px">Buy now</ItemViewButton>
         <ItemViewTab>
           <ItemViewTab.TabPane
