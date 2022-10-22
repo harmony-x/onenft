@@ -68,19 +68,21 @@ const Collection: NextPage<CollectionProps> = ({ query: { id = "" } }) => {
                         </Link>
                       ))}
                   </Row>
-                  <Button
-                    border="1px solid rgba(5, 212, 182, 0.67)"
-                    bgColor="transparent"
-                    bgImage="none"
-                    mb="60px"
-                    maxWidth="221px"
-                    width="100%"
-                    onClick={() =>
-                      setShowMore((prevShowMore) => prevShowMore + 4)
-                    }
-                  >
-                    Load More
-                  </Button>
+                  {data.items.length ? (
+                    <Button
+                      border="1px solid rgba(5, 212, 182, 0.67)"
+                      bgColor="transparent"
+                      bgImage="none"
+                      mb="60px"
+                      maxWidth="221px"
+                      width="100%"
+                      onClick={() =>
+                        setShowMore((prevShowMore) => prevShowMore + 4)
+                      }
+                    >
+                      Load More
+                    </Button>
+                  ) : null}
                 </FlexibleDiv>
               </ItemsTab.TabPane>
               <ItemsTab.TabPane key="2" tab="Listed">
