@@ -4,6 +4,21 @@ import { Telegram } from "$svgs/telegram";
 import { Twitter } from "$svgs/twitter";
 import { FooterLink, Menu, Social } from "$types/global";
 
+export const headerLinks = [
+  {
+    name: "Explore",
+    link: "/",
+  },
+  {
+    name: "Activity",
+    link: "#",
+  },
+  {
+    name: "Create",
+    link: "/create-nft",
+  },
+];
+
 export const footerLinks: FooterLink[] = [
   {
     heading: "MARKETPLACE",
