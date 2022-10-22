@@ -13,7 +13,6 @@ import { ColumnsType } from "antd/lib/table";
 import { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import { marketContract } from "contract-factory";
-import Image from "next/image";
 import { FC } from "react";
 import {
   ItemViewPrice,
@@ -25,6 +24,7 @@ import {
 } from "./ItemView.styles";
 import { IItemViewProps } from "./ItemView.types";
 import { useQuery } from "react-query";
+import { Image } from "antd";
 
 const ItemView: FC<IItemViewProps> = ({
   button,
@@ -107,10 +107,29 @@ const ItemView: FC<IItemViewProps> = ({
       justifyContent="space-between"
     >
       <StyledItemViewImage>
-        <Image src={itemImage} objectFit="cover" alt="" layout="fill" />
+        <Image
+          src={itemImage}
+          alt=""
+          width="100%"
+          height="100%"
+          placeholder={
+            <Image
+              alt=""
+              preview={false}
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPkE+WrBwABHACybY9s4AAAAABJRU5ErkJggg=="
+              width="100%"
+              height="100%"
+            />
+          }
+          preview={false}
+        />
       </StyledItemViewImage>
       <StyledItemViewContent>
-        <CreatorDisplay mb="14px" name={creatorName} img="/primate.png" />
+        <CreatorDisplay
+          mb="14px"
+          name={creatorName}
+          img="/default-profile.jpeg"
+        />
         <HeadingTwo mb="6px" as="h3">
           {itemName}
         </HeadingTwo>
