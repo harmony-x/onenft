@@ -6,7 +6,7 @@ import { headerLinks } from "$utils/data";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   Button,
   HarmburgerSmall,
@@ -22,8 +22,9 @@ import {
 } from "./Header.styles";
 import { IHeaderProps } from "./Header.types";
 
-const Header: FC<IHeaderProps> = () => {
+const Header: FC<IHeaderProps> = ({ searchString }) => {
   const router = useRouter();
+  const [search, setSearch] = useState<string>(searchString ?? "");
 
   return (
     <StyledHeader>
@@ -35,6 +36,9 @@ const Header: FC<IHeaderProps> = () => {
         </Link>
         <InputContainer>
           <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onPressEnter={() => router.push(`/search?search=${search}`)}
             prefix={<Search />}
             placeholder="Search by items/User/Address"
             width="100%"

@@ -2,6 +2,7 @@ import CSSTypes from "csstype";
 
 export interface IHeaderProps {
   activePage?: string;
+  searchString?: string;
 }
 
 export interface IStyledLinkProps {

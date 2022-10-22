@@ -4,10 +4,10 @@ import { FC } from "react";
 import { Content, Layout } from "./MainLayout.styles";
 import { IMainLayoutProps } from "./MainLayout.types";
 
-const MainLayout: FC<IMainLayoutProps> = ({ activePage, children }) => {
+const MainLayout: FC<IMainLayoutProps> = ({ activePage, children, search }) => {
   return (
     <Layout>
-      <Header activePage={activePage} />
+      <Header searchString={search} activePage={activePage} />
       <Content>{children}</Content>
       <Footer />
     </Layout>
