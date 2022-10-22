@@ -62,7 +62,7 @@ const CreateCollection: NextPage = () => {
                 weight="300"
                 color="rgba(255, 255, 255, 0.47)"
               >
-                TAdding a category will help make your item more discoverable
+                Adding a category will help make your item more discoverable
               </HeadingSix>
               <Select
                 width="208px"
