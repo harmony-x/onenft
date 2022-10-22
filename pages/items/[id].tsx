@@ -26,6 +26,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useQuery } from "react-query";
+import { Web3Provider } from "@ethersproject/providers";
+import { useWeb3React } from "@web3-react/core";
+import { marketContract } from "contract-factory";
 
 interface ItemProps {
   query: {
@@ -48,6 +51,29 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
     ["singleCollectionNFTs", id],
     () => getSingleCollectionNFTs(id)
   );
+  const { library, account, active } = useWeb3React<Web3Provider>();
+
+  // @akindeji
+  // You can manage the onClick logic else where if needed
+  const onBuyClick = async () => {
+    // remember to check if the user is connected
+    // remember to disable clicking on pressing the button, can enable it in finally block
+    try {
+      const tx = await marketContract(library).buyNft(
+        // put actual nft address
+        "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        // put actual nft id
+        1
+      );
+      // wait for two confirmations
+      await tx.wait(2);
+      // refresh page or something, just make sure new owner shows and all
+    } catch (error) {
+      console.log(error);
+      // handle error, a generic message showing item couldn't be bought works
+    }
+  };
+
   const router = useRouter();
 
   return (
@@ -93,7 +119,7 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
               <FlexibleDiv gap="24px" flexDir="column">
                 <Row gutter={{ md: 24, lg: 24 }}>
                   {collectionsData.items
-                    .splice(0, 4)
+                    .slice(0, 4)
                     .map(({ contract_address, token_id }) => (
                       <Link
                         key={token_id}
@@ -209,6 +235,7 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
                 : "linear-gradient(45deg, #E23B49 6.89%, #8084DC 93.89%)"
             }
             width="100%"
+            onClick={mode === "buy" ? onBuyClick : () => console.log("sell")}
           >
             {mode === "buy" ? "Buy now" : "Sell Item"}
           </ItemViewModalButton>
