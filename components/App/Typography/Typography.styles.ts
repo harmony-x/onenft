@@ -43,6 +43,7 @@ export const ParagraphOne = styled.h3<ITypographyProps>`
   line-height: 2rem;
   color: ${({ color }) => color ?? "rgba(255, 255, 255, 0.67)"};
   margin-bottom: ${({ mb }) => mb};
+  word-break: break-all;
   text-align: ${({ textAlign }) => textAlign};
   @media screen and (${BREAKPOINTS.sm}) {
     font-size: 2.4rem;
