@@ -1,5 +1,6 @@
 import { FlexibleDiv } from "$components/Box/Box.styles";
 import { BREAKPOINTS } from "$constants/breakpoints";
+import { Skeleton } from "antd";
 import styled from "styled-components";
 
 export const ResultContainer = styled.section`
@@ -72,5 +73,27 @@ export const ResultAvartar = styled.div`
       width: 26px;
       height: 26px;
     }
+  }
+`;
+
+export const ResultAvartarSkeleton = styled(Skeleton.Avatar)`
+  width: 60px;
+  height: 60px;
+  .ant-skeleton-avatar {
+    width: 100%;
+    height: 100%;
+  }
+  @media screen and (${BREAKPOINTS.lg}) {
+    width: 95px;
+    height: 95px;
+  }
+`;
+
+export const ResultItemSkeleton = styled(Skeleton.Avatar)`
+  width: 150px;
+  height: 20px;
+  .ant-skeleton-avatar {
+    width: 100%;
+    height: 100%;
   }
 `;
