@@ -1,15 +1,19 @@
 import { FlexibleDiv } from "$components/Box/Box.styles";
 import { BREAKPOINTS } from "$constants/breakpoints";
+import { Skeleton } from "antd";
 import styled from "styled-components";
 
-export const StyledItemCard = styled.div`
+export const StyledItemCard = styled.a`
+  display: block;
   width: 100%;
   background-color: #2d2f43;
   min-height: 373px;
   margin-bottom: 40px;
+  overflow: hidden;
   cursor: pointer;
   img {
     transition: all 0.3s ease-in-out;
+    object-fit: cover;
   }
   &:hover {
     img {
@@ -17,14 +21,37 @@ export const StyledItemCard = styled.div`
     }
   }
 `;
+
+export const StyledItemCardImageSkeleton = styled(Skeleton.Avatar)`
+  width: 100%;
+  margin-top: 0;
+  .ant-skeleton-avatar {
+    width: 100%;
+    height: 229px;
+  }
+`;
+
 export const StyledItemCardImage = styled.div`
   position: relative;
   width: 100%;
   height: 229px;
+  overflow: hidden;
 `;
 
 export const StyledItemCardContent = styled.div`
   padding: 27px 40px 35px 20px;
+  background-color: #2d2f43;
+`;
+
+export const StyledItemCardContentSkeleton = styled(Skeleton)`
+  padding: 0 40px 0 20px;
+  background-color: #2d2f43;
+  width: 100%;
+  margin-top: 0;
+  /* .ant-skeleton-avatar {
+    width: 100%;
+    height: 229px;
+  } */
 `;
 
 export const StyledItemCardDetails = styled(FlexibleDiv)`
