@@ -41,7 +41,7 @@ const Search: NextPage<SearchProps> = ({ query: { search = "" } }) => {
     getUsers
   );
   const { data: collectionsData, isLoading: isLoadingCollections } = useQuery(
-    "users",
+    "collections",
     getCollections
   );
 
