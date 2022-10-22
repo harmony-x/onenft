@@ -122,7 +122,7 @@ export const StyledLink = styled.a<IStyledLinkProps>`
 
 export const Button = styled.div`
   width: 15%;
-  width: 185px;
+  width: 250px;
   text-align: center;
   /* @media screen and (${BREAKPOINTS.lg}) {
     width: 10%;
