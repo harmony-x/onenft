@@ -48,8 +48,10 @@ const Search: NextPage<SearchProps> = ({ query: { search = "" } }) => {
   useEffect(() => {
     if (usersData)
       setFilteredUsers(
-        usersData.filter(({ name = "" }) =>
-          name?.toLowerCase()?.includes(search)
+        usersData.filter(
+          ({ name = "", address = "" }) =>
+            search &&
+            (name?.toLowerCase()?.includes(search) || address?.includes(search))
         )
       );
   }, [usersData, search]);
@@ -57,8 +59,8 @@ const Search: NextPage<SearchProps> = ({ query: { search = "" } }) => {
   useEffect(() => {
     if (collectionsData)
       setFilteredCollections(
-        collectionsData.filter(({ name = "" }) =>
-          name?.toLowerCase()?.includes(search)
+        collectionsData.filter(
+          ({ name = "" }) => search && name?.toLowerCase()?.includes(search)
         )
       );
   }, [collectionsData, search]);
@@ -91,7 +93,7 @@ const Search: NextPage<SearchProps> = ({ query: { search = "" } }) => {
                 <ResultAvartarSkeleton active />
                 <ResultItemSkeleton active shape="square" />
               </ResultItem>
-            ) : (
+            ) : filteredCollections.length ? (
               filteredCollections.map(
                 ({ address, name, description, image }, i) => (
                   <div key={address}>
@@ -114,7 +116,7 @@ const Search: NextPage<SearchProps> = ({ query: { search = "" } }) => {
                           alignItems="flex-start"
                         >
                           <HeadingFive as="p" color="rgba(255, 255, 255, 0.87)">
-                            {name}
+                            {name ?? "-"}
                           </HeadingFive>
                           <ParagraphTwo as="p" weight="300">
                             {applyEllipsis(description, 30)}
@@ -128,6 +130,10 @@ const Search: NextPage<SearchProps> = ({ query: { search = "" } }) => {
                   </div>
                 )
               )
+            ) : (
+              <ResultItem justifyContent="flex-start" alignItems="center">
+                <HeadingFive as="p">No collection(s) found</HeadingFive>
+              </ResultItem>
             )}
             <ResultHeading>
               <HeadingFive weight="300">Accounts</HeadingFive>
@@ -141,7 +147,7 @@ const Search: NextPage<SearchProps> = ({ query: { search = "" } }) => {
                 <ResultAvartarSkeleton active />
                 <ResultItemSkeleton active shape="square" />
               </ResultItem>
-            ) : (
+            ) : filteredUsers.length ? (
               filteredUsers.map(({ address, name, profile_picture }, i) => (
                 <div key={address}>
                   <Link href={`users/${address}`}>
@@ -164,7 +170,7 @@ const Search: NextPage<SearchProps> = ({ query: { search = "" } }) => {
                         alignItems="flex-start"
                       >
                         <HeadingFive as="p" color="rgba(255, 255, 255, 0.87)">
-                          {name}
+                          {name ?? "Name not set"}
                         </HeadingFive>
                       </FlexibleDiv>
                     </ResultItem>
@@ -172,6 +178,10 @@ const Search: NextPage<SearchProps> = ({ query: { search = "" } }) => {
                   {i >= filteredUsers.length - 1 ? null : <ResultDivider />}
                 </div>
               ))
+            ) : (
+              <ResultItem justifyContent="flex-start" alignItems="center">
+                <HeadingFive as="p">No user(s) found</HeadingFive>
+              </ResultItem>
             )}
           </ResultBox>
         </ResultContainer>
