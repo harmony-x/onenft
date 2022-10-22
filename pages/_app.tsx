@@ -15,6 +15,7 @@ import { use } from "chai";
 import { useState } from "react";
 import { accessTokenKey } from "$utils/data";
 import { AppContextProvider } from "$utils/context";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 function getLibrary(provider: any): Web3Provider {
   const library = new Web3Provider(provider);
@@ -23,34 +24,47 @@ function getLibrary(provider: any): Web3Provider {
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [AUTHENTICATION_STATUS, setStatus] = useState<AuthenticationStatus>("loading");
+  const [AUTHENTICATION_STATUS, setStatus] =
+    useState<AuthenticationStatus>("loading");
 
-  if(typeof window !== "undefined") {
-    if(!!localStorage.getItem(accessTokenKey) && AUTHENTICATION_STATUS !== "authenticated") {
+  const [queryClient] = useState(() => new QueryClient());
+
+  if (typeof window !== "undefined") {
+    if (
+      !!localStorage.getItem(accessTokenKey) &&
+      AUTHENTICATION_STATUS !== "authenticated"
+    ) {
       setStatus("authenticated");
-    } else if(!localStorage.getItem(accessTokenKey) && AUTHENTICATION_STATUS !== "unauthenticated") {
+    } else if (
+      !localStorage.getItem(accessTokenKey) &&
+      AUTHENTICATION_STATUS !== "unauthenticated"
+    ) {
       setStatus("unauthenticated");
     }
   }
   return (
-    <AppContextProvider value={{
-      authStatus: AUTHENTICATION_STATUS,
-      setAuthStatus: setStatus
-    }}>
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitAuthenticationProvider
-        adapter={authenticationAdapter(setStatus)}
-        status={AUTHENTICATION_STATUS}
-      >
-        <RainbowKitProvider chains={chains}>
-          <Web3ReactProvider getLibrary={getLibrary}>
-            <FontStyles />
-            <GlobalStyles />
-            <Component {...pageProps} />
-          </Web3ReactProvider>
-        </RainbowKitProvider>
-      </RainbowKitAuthenticationProvider>
-    </WagmiConfig>
+    <AppContextProvider
+      value={{
+        authStatus: AUTHENTICATION_STATUS,
+        setAuthStatus: setStatus,
+      }}
+    >
+      <WagmiConfig client={wagmiClient}>
+        <RainbowKitAuthenticationProvider
+          adapter={authenticationAdapter(setStatus)}
+          status={AUTHENTICATION_STATUS}
+        >
+          <RainbowKitProvider chains={chains}>
+            <QueryClientProvider client={queryClient}>
+              <Web3ReactProvider getLibrary={getLibrary}>
+                <FontStyles />
+                <GlobalStyles />
+                <Component {...pageProps} />
+              </Web3ReactProvider>
+            </QueryClientProvider>
+          </RainbowKitProvider>
+        </RainbowKitAuthenticationProvider>
+      </WagmiConfig>
     </AppContextProvider>
   );
 }
