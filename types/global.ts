@@ -25,3 +25,15 @@ export interface FooterLink {
   heading: string;
   menu: Menu[];
 }
+
+export type ISODateString =
+  `${number}-${number}-${number}T${number}:${number}:${number}.${number}Z`;
+
+export type Category =
+  | "art"
+  | "music"
+  | "trading card"
+  | "collectibles"
+  | "photography"
+  | "virtual world"
+  | null;
