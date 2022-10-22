@@ -1,3 +1,3 @@
-import { Input } from "./Input.styles";
+import { Input, TextArea } from "./Input.styles";
 
-export { Input };
+export { Input, TextArea };
