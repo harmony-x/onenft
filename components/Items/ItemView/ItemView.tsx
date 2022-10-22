@@ -8,8 +8,11 @@ import {
 import { Harmony } from "$svgs/harmony";
 import { getNFTTransactions, NFTTransaction } from "$utils/api";
 import { activity } from "$utils/data";
-import { applyEllipsis, truncateAddress } from "$utils/functions";
+import { truncateAddress } from "$utils/functions";
 import { ColumnsType } from "antd/lib/table";
+import { Web3Provider } from "@ethersproject/providers";
+import { useWeb3React } from "@web3-react/core";
+import { marketContract } from "contract-factory";
 import Image from "next/image";
 import { FC } from "react";
 import {
@@ -33,7 +36,7 @@ const ItemView: FC<IItemViewProps> = ({
   id,
   tokenId,
 }) => {
-  const { data, isLoading, isSuccess } = useQuery(
+  const { data, isLoading } = useQuery(
     ["nftTransactionsData", id, tokenId],
     () => getNFTTransactions(id, tokenId)
   );
@@ -76,7 +79,27 @@ const ItemView: FC<IItemViewProps> = ({
       dataIndex: "time",
     },
   ];
+  const { library, account, active } = useWeb3React<Web3Provider>();
 
+  // @akindeji
+  // You can manage the onClick logic else where if needed
+  const onClick = async () => {
+    // remember to check if the user is connected
+    // remember to disable clicking on pressing the button, can enable it in finally block
+    try {
+      const tx = await marketContract(library).buyNft(
+        // put actual nft address
+        "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        // put actual nft id
+        1
+      );
+      // wait for two confirmations
+      await tx.wait(2);
+      // refresh page or something, just make sure new owner shows and all
+    } catch (error) {
+      // handle error, a generic message showing item couldn't be bought works
+    }
+  };
   return (
     <StyledItemView
       as="section"
@@ -103,6 +126,8 @@ const ItemView: FC<IItemViewProps> = ({
           <StyledItemViewContentText as="p">$20.56</StyledItemViewContentText>
         </ItemViewPrice>
         {button}
+        <StyledItemViewContentText as="sub">$20.56</StyledItemViewContentText>
+        {/* Check other buy conditions here */}
         <ItemViewTab>
           <ItemViewTab.TabPane key="1" tab="About Creator">
             {description}

@@ -1,6 +1,7 @@
-import { Lock__factory } from "typechain-types";
+import { OneNftMarket__factory } from "typechain-types";
 
-export const lockContract = (provider: any) => {
+export const marketContract = (provider: any) => {
     const signer = provider.getSigner();
-    return Lock__factory.connect("0x0", signer)
+    // ADD contract address here
+    return OneNftMarket__factory.connect("0x0", signer)
 };
