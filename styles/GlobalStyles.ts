@@ -69,6 +69,10 @@ export const GlobalStyles = createGlobalStyle`
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(2.5px);
   }
+  
+  .ant-dropdown-arrow {
+    display: none;
+  }
 
   /* @media (prefers-color-scheme: dark) {
     html {
