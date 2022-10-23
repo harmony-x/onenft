@@ -1,8 +1,8 @@
+import { MARKETPLACE_ADDRESS } from "$utils/data";
 import { OneNftMarket__factory, OwnableNft__factory } from "typechain-types";
 
 export const marketContract = (provider: any) => {
-  // ADD actual contract address here
-  return OneNftMarket__factory.connect("0x5FbDB2315678afecb367f032d93F642f64180aa3", provider);
+  return OneNftMarket__factory.connect(MARKETPLACE_ADDRESS, provider);
 };
 
 export const deployNftContract = async (

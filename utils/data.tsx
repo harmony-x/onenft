@@ -249,3 +249,4 @@ export const activity = [
   },
 ];
 export const accessTokenKey = "oneNFT_accessToken";
+export const MARKETPLACE_ADDRESS = "0xEEF20045d1CC0A94D6D4Ee02dbB677FfFE45D9B9";
