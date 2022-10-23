@@ -193,30 +193,18 @@ export const updateProfile = async (user: Partial<UserRequest>) => {
 };
 
 export const getUsers = async () => {
-  if (typeof window !== "undefined" && !!localStorage.getItem(accessTokenKey)) {
-    return await (
-      await oneNFTApiInstance.get<UserResponse[]>("/api/users", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
-        },
-      })
-    ).data;
-  }
+  return await (
+    await oneNFTApiInstance.get<UserResponse[]>("/api/users", {})
+  ).data;
 };
 
 export const getUser = async ({ address }: Pick<UserResponse, "address">) => {
-  if (typeof window !== "undefined" && !!localStorage.getItem(accessTokenKey)) {
-    return await (
-      await oneNFTApiInstance.get<UserResponse>(
-        `/api/user?address=${address}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
-          },
-        }
-      )
-    ).data;
-  }
+  return await (
+    await oneNFTApiInstance.get<UserResponse>(
+      `/api/user?address=${address}`,
+      {}
+    )
+  ).data;
 };
 
 export const postCollection = async ({
@@ -239,30 +227,17 @@ export const postCollection = async ({
 };
 
 export const getCollections = async () => {
-  if (typeof window !== "undefined" && !!localStorage.getItem(accessTokenKey)) {
-    return await (
-      await oneNFTApiInstance.get<Collection[]>("/api/collections", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
-        },
-      })
-    ).data;
-  }
+  return await (
+    await oneNFTApiInstance.get<Collection[]>("/api/collections", {})
+  ).data;
 };
 
 export const getCollection = async ({
   address,
 }: Pick<Collection, "address">) => {
-  if (typeof window !== "undefined" && !!localStorage.getItem(accessTokenKey)) {
-    return await (
-      await oneNFTApiInstance.get<Collection>(
-        `/api/collection?address=${address}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem(accessTokenKey)}`,
-          },
-        }
-      )
-    ).data;
-  }
+  return await (
+    await oneNFTApiInstance.get<Collection>(
+      `/api/collection?address=${address}`
+    )
+  ).data;
 };
