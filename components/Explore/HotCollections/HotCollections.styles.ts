@@ -135,13 +135,13 @@ export const StyledHotCollections = styled.ol`
   }
 `;
 
-export const StyledHotCollection = styled.li`
+export const StyledHotCollection = styled.li<{ width?: string }>`
   a {
     display: flex;
     gap: 11px;
     align-items: center;
     background-color: #2d2f43;
-    width: 203px;
+    width: ${({ width }) => width ?? "203px"};
     height: 72px;
     border-radius: 10px;
     padding: 10px 11px;
@@ -159,6 +159,7 @@ export const StyledHotCollection = styled.li`
       border-radius: 15px;
       padding: 24px 20px;
     }
+    margin-bottom: ${({ width }) => width ?? "30px"};
     img {
       transition: 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
     }
