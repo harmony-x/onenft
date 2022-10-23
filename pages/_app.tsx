@@ -11,7 +11,6 @@ import { authenticationAdapter, chains, wagmiClient } from "$utils/rainbow";
 import "antd/dist/antd.css";
 import { GlobalStyles } from "styles/GlobalStyles";
 import { FontStyles } from "styles/FontStyles";
-import { use } from "chai";
 import { useState } from "react";
 import { accessTokenKey } from "$utils/data";
 import { AppContextProvider } from "$utils/context";

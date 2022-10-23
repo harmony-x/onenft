@@ -16,14 +16,18 @@ import { TelegramTwo } from "$svgs/telegram-2";
 import { TwitterTwo } from "$svgs/twitter-2";
 import { Website } from "$svgs/website";
 import { Col, Row } from "antd";
+import { deployNftContract } from "contract-factory";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { NFTStorage, File } from "nft.storage";
 import { useState } from "react";
+import { useAccount, useSigner } from "wagmi";
 
 const CreateCollection: NextPage = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
+  const { data: signer } = useSigner();
+  const { isDisconnected } = useAccount();
 
   return (
     <div>
@@ -157,6 +161,14 @@ const CreateCollection: NextPage = () => {
           </Row>
           <CreateItemButton
             // onClick={() => imageFile && storeAsset(imageFile)}
+            onClick={async () => {
+              if (isDisconnected) return;
+              // @akindeji
+              // set name of contract here
+              // set symbol of contract here (try and do a 4/3 letter abbreviation from the title if possible, or something random sha)
+              const contract = await deployNftContract(signer, "Name", "Symbol");
+              // you can get the address at (contract.address) here
+            }}
             // loading={uploading}
             height="60px"
           >
