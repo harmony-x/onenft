@@ -37,7 +37,7 @@ const Collection: NextPage<CollectionProps> = ({ query: { id = "" } }) => {
           <Skeleton active paragraph={{ rows: 10 }} />
         ) : (
           <>
-            <CollectionView />
+            <CollectionView id={id} name={data.items[0]?.contract_name ?? ""} />
             <ItemsTab mb="86px">
               <ItemsTab.TabPane key="1" tab="Owned">
                 <FlexibleDiv
@@ -49,24 +49,26 @@ const Collection: NextPage<CollectionProps> = ({ query: { id = "" } }) => {
                   <Row gutter={{ md: 24, lg: 24 }}>
                     {data.items
                       .slice(0, showMore)
-                      .map(({ contract_address, token_id }, i) => (
-                        <Link
-                          key={token_id}
-                          href={`/items/${contract_address}?token_id=${token_id}`}
-                        >
-                          <Col
-                            xs={{ span: 24 }}
-                            md={{ span: 12 }}
-                            lg={{ span: 8 }}
-                            xl={{ span: 6 }}
+                      .map(
+                        ({ contract_address, token_id, contract_name }, i) => (
+                          <Link
+                            key={token_id}
+                            href={`/items/${contract_address}?token_id=${token_id}`}
                           >
-                            <ItemCard
-                              id={contract_address}
-                              tokenId={token_id}
-                            />
-                          </Col>
-                        </Link>
-                      ))}
+                            <Col
+                              xs={{ span: 24 }}
+                              md={{ span: 12 }}
+                              lg={{ span: 8 }}
+                              xl={{ span: 6 }}
+                            >
+                              <ItemCard
+                                id={contract_address}
+                                tokenId={token_id}
+                              />
+                            </Col>
+                          </Link>
+                        )
+                      )}
                   </Row>
                   {data.items.length ? (
                     <Button

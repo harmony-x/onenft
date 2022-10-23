@@ -33,6 +33,12 @@ export const Input = styled(AntdInput)<IInputProps>`
     color: rgba(255, 255, 255, 0.67);
     background-color: transparent;
   }
+  &:not(.ant-input-disabled):not(.ant-input-borderless).ant-input,
+  &:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover,
+  &:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper,
+  &:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper:hover {
+    background-color: #2d2f43;
+  }
 `;
 
 export const TextArea = styled(AntdInput.TextArea)<IInputProps>`
@@ -66,5 +72,11 @@ export const TextArea = styled(AntdInput.TextArea)<IInputProps>`
     color: rgba(255, 255, 255, 0.67);
     background-color: transparent;
     height: ${({ height }) => height ?? "221px"};
+  }
+  &:not(.ant-input-disabled):not(.ant-input-borderless).ant-input,
+  &:not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover,
+  &:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper,
+  &:not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper:hover {
+    background-color: transparent;
   }
 `;

@@ -110,13 +110,13 @@ export interface Collection {
   category: Category;
   description: string;
   discord: string;
-  email: string;
+  email?: string;
   image: string;
-  instagram: string;
+  instagram?: string;
   name: string;
   owner: string;
   platform_created: true;
-  royalty: 0;
+  royalty: number;
   telegram: string;
   twitter: string;
   website: string;
@@ -143,28 +143,28 @@ export const oneNFTApiInstance = axios.create({
 export const getSingleCollectionNFTs = async (address: string) =>
   await (
     await covalentApiInstance.get<BaseResponse<NFTToken[]>>(
-      `/tokens/${address}/nft_token_ids/?key=${covalentKey}`
+      `/tokens/${address}/nft_token_ids/?quote-currency=USD&format=JSON&key=${covalentKey}`
     )
   ).data.data;
 
 export const getUserNFTs = async (address: string) =>
   await (
     await covalentApiInstance.get<BaseResponse<NFTMetaData[]>>(
-      `/address/${address}/balances_v2/?key=${covalentKey}&nft=true&no-nft-fetch=true`
+      `/address/${address}/balances_v2/?quote-currency=USD&format=JSON&key=${covalentKey}&nft=true&no-nft-fetch=true`
     )
   ).data.data;
 
 export const getSingleNFTMetaData = async (address: string, token_id: string) =>
   await (
     await covalentApiInstance.get<BaseResponse<NFTMetaData[]>>(
-      `tokens/${address}/nft_metadata/${token_id}/?key=${covalentKey}`
+      `tokens/${address}/nft_metadata/${token_id}/?quote-currency=USD&format=JSON&key=${covalentKey}`
     )
   ).data.data;
 
 export const getNFTTransactions = async (address: string, token_id: string) =>
   await (
     await covalentApiInstance.get<BaseResponse<NFTTransactions[]>>(
-      `tokens/${address}/nft_transactions/${token_id}/?key=${covalentKey}`
+      `tokens/${address}/nft_transactions/${token_id}/?quote-currency=USD&format=JSON&key=${covalentKey}`
     )
   ).data.data;
 
@@ -226,7 +226,7 @@ export const postCollection = async ({
   if (typeof window !== "undefined" && !!localStorage.getItem(accessTokenKey)) {
     return await (
       await oneNFTApiInstance.post<Collection>(
-        `/api/collections/${address}`,
+        `/api/collections?collection_address=${address}`,
         body,
         {
           headers: {

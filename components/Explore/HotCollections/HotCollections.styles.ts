@@ -1,6 +1,6 @@
 import { FlexibleDiv } from "$components/Box/Box.styles";
 import { BREAKPOINTS } from "$constants/breakpoints";
-import { Tabs } from "antd";
+import { Skeleton, Tabs } from "antd";
 import styled from "styled-components";
 
 export const StyledHotCollectionsContainer = styled.section`
@@ -136,27 +136,37 @@ export const StyledHotCollections = styled.ol`
 `;
 
 export const StyledHotCollection = styled.li`
-  display: flex;
-  gap: 11px;
-  align-items: center;
-  background-color: #2d2f43;
-  width: 203px;
-  height: 72px;
-  border-radius: 10px;
-  padding: 10px 11px;
-  @media screen and (${BREAKPOINTS.sm}) {
-    gap: 15px;
-    width: 303px;
-    height: 102px;
-    border-radius: 13px;
-    padding: 15px 14px;
-  }
-  @media screen and (${BREAKPOINTS.lg}) {
-    gap: 24px;
-    width: 416px;
-    height: 143px;
-    border-radius: 15px;
-    padding: 24px 20px;
+  a {
+    display: flex;
+    gap: 11px;
+    align-items: center;
+    background-color: #2d2f43;
+    width: 203px;
+    height: 72px;
+    border-radius: 10px;
+    padding: 10px 11px;
+    @media screen and (${BREAKPOINTS.sm}) {
+      gap: 15px;
+      width: 303px;
+      height: 102px;
+      border-radius: 13px;
+      padding: 15px 14px;
+    }
+    @media screen and (${BREAKPOINTS.lg}) {
+      gap: 24px;
+      width: 416px;
+      height: 143px;
+      border-radius: 15px;
+      padding: 24px 20px;
+    }
+    img {
+      transition: 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+    &:hover {
+      img {
+        transform: scale(1.2);
+      }
+    }
   }
 `;
 

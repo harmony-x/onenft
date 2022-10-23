@@ -8,7 +8,12 @@ import { Harmony } from "$svgs/harmony";
 import { Telegram } from "$svgs/telegram";
 import { Twitter } from "$svgs/twitter";
 import { Verified } from "$svgs/verified";
+import { Website } from "$svgs/website";
+import { getCollection } from "$utils/api";
 import Image from "next/image";
+import Link from "next/link";
+import { FC } from "react";
+import { useQuery } from "react-query";
 import {
   CollectionPrices,
   CollectionViewContainer,
@@ -16,12 +21,22 @@ import {
   CollectionViewImage,
   CollectionViewText,
 } from "./CollectionView.styles";
+import { ICollectionviewProps } from "./CollectionView.types";
 
-const CollectionView = () => {
+const CollectionView: FC<ICollectionviewProps> = ({ id, name }) => {
+  const { data, isLoading, isSuccess } = useQuery(["collection", id], () =>
+    getCollection({ address: id })
+  );
+
   return (
     <CollectionViewContainer>
       <CollectionViewImage>
-        <Image src="/primate.png" alt="" layout="fill" />
+        <Image
+          src={data?.image ?? "/default-avartar.png"}
+          alt=""
+          layout="fill"
+          objectFit="cover"
+        />
       </CollectionViewImage>
       <CollectionViewContent
         flexDir="column"
@@ -34,27 +49,43 @@ const CollectionView = () => {
           gap="10px  "
           justifyContent="flex-start"
         >
-          <HeadingTwo>Primates</HeadingTwo>
+          <HeadingTwo>{name ? name : data?.name ?? ""}</HeadingTwo>
           <Verified />
         </FlexibleDiv>
         <FlexibleDiv gap="12px" justifyContent="flex-start">
-          <div className="socials-svg">
-            <Discord />
-          </div>
-          <div className="socials-svg">
-            <Twitter />
-          </div>
-          <div className="socials-svg">
-            <Telegram />
-          </div>
+          {data?.discord ? (
+            <Link href={data.discord}>
+              <a target="_blank" className="socials-svg">
+                <Discord />
+              </a>
+            </Link>
+          ) : null}
+          {data?.twitter ? (
+            <Link href={data.twitter}>
+              <a target="_blank" className="socials-svg">
+                <Twitter />
+              </a>
+            </Link>
+          ) : null}
+          {data?.telegram ? (
+            <Link href={data.telegram}>
+              <a target="_blank" className="socials-svg">
+                <Telegram />
+              </a>
+            </Link>
+          ) : null}
+          {data?.website ? (
+            <Link href={data.website}>
+              <a target="_blank" className="socials-svg">
+                <Website />
+              </a>
+            </Link>
+          ) : null}
         </FlexibleDiv>
         <CollectionViewText>
-          Royality Fee <span>8%</span>
+          Royality Fee <span>{data?.royalty ?? ""}%</span>
         </CollectionViewText>
-        <CollectionViewText>
-          Collection of 10,000 Primates facilitating a seamless adoption of the
-          web3 space through community fueled ventures and collaborations.
-        </CollectionViewText>
+        <CollectionViewText>{data?.description ?? ""}</CollectionViewText>
         <CollectionPrices flexWrap="wrap" justifyContent="flex-start">
           <FlexibleDiv
             gap="5px"

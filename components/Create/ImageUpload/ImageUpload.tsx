@@ -1,3 +1,4 @@
+import { getBase64 } from "$utils/functions";
 import Image from "next/image";
 import React, { useState } from "react";
 import {
@@ -17,13 +18,28 @@ const ImageUpload: React.FC<IImageUploadProps> = ({
       <StyledImageUploadInner borderRadius={borderRadius}>
         <Image
           alt=""
-          src={imageFile ? URL.createObjectURL(imageFile) : "/upload.png"}
+          src={
+            typeof imageFile === "string"
+              ? imageFile || "/upload.png"
+              : imageFile
+              ? URL.createObjectURL(imageFile)
+              : "/upload.png"
+          }
           layout="fill"
           objectFit="cover"
         />
         <input
           onChange={(e) => {
-            setImageFile(e.target.files?.length ? e.target.files[0] : null);
+            console.log(typeof imageFile);
+            if (typeof imageFile === "string") {
+              if (e.target.files && e.target.files[0].size / 1024 / 1024 < 2) {
+                getBase64(e.target.files[0]).then(async (res) => {
+                  setImageFile(res);
+                });
+              }
+            } else {
+              setImageFile(e.target.files?.length ? e.target.files[0] : null);
+            }
           }}
           type="file"
           // onChange={handleUploadPhoto}

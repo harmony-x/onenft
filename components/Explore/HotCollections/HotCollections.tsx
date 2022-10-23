@@ -6,9 +6,13 @@ import { FlexibleDiv } from "$components/Box/Box.styles";
 import { Ethereum } from "$svgs/ethereum";
 import { Harmony } from "$svgs/harmony";
 import { Verified } from "$svgs/verified";
+import { getCollection } from "$utils/api";
 import { hotCollections } from "$utils/data";
-import { splitArrToChunks } from "$utils/functions";
+import { applyEllipsis, splitArrToChunks } from "$utils/functions";
 import Image from "next/image";
+import Link from "next/link";
+import { FC } from "react";
+import { useQuery } from "react-query";
 import {
   HotCollectionsTab,
   StyledHotCollection,
@@ -19,6 +23,48 @@ import {
   StyledHotCollections,
   StyledHotCollectionsContainer,
 } from "./HotCollections.styles";
+
+const HotCollection: FC<{ id: number; address: string }> = ({
+  id,
+  address,
+}) => {
+  const { data, isLoading, isSuccess } = useQuery(["collection", id], () =>
+    getCollection({ address })
+  );
+
+  return (
+    <StyledHotCollection>
+      {isLoading ? null : (
+        <Link href={`collections/${address}`}>
+          <a>
+            <StyledHotCollectionNumbering>{id}.</StyledHotCollectionNumbering>
+            <StyledHotCollectionImage>
+              <Image
+                objectFit="cover"
+                layout="fill"
+                alt=""
+                src={data?.image ?? "/default-avartar.png"}
+              />
+              <Verified />
+            </StyledHotCollectionImage>
+            <div>
+              <HeadingFour mb="2px" as="p">
+                {data?.name ? applyEllipsis(data?.name, 9) : ""}
+              </HeadingFour>
+              <StyledHotCollectionFloorPrice>
+                Floor price:{" "}
+                <StyledHotCollectionFloorPriceSVG>
+                  <Harmony />
+                </StyledHotCollectionFloorPriceSVG>{" "}
+                100
+              </StyledHotCollectionFloorPrice>
+            </div>
+          </a>
+        </Link>
+      )}
+    </StyledHotCollection>
+  );
+};
 
 const HotCollections = () => {
   const splitHotCollections = splitArrToChunks<typeof hotCollections[number]>(
@@ -49,33 +95,8 @@ const HotCollections = () => {
                 justifyContent="flex-start"
                 flexDir="column"
               >
-                {item.map(({ image, name, price, id }, i) => (
-                  <StyledHotCollection key={i}>
-                    <StyledHotCollectionNumbering>
-                      {id}.
-                    </StyledHotCollectionNumbering>
-                    <StyledHotCollectionImage>
-                      <Image
-                        objectFit="cover"
-                        layout="fill"
-                        alt=""
-                        src={"/primate.png"}
-                      />
-                      <Verified />
-                    </StyledHotCollectionImage>
-                    <div>
-                      <HeadingFour mb="2px" as="p">
-                        {name}
-                      </HeadingFour>
-                      <StyledHotCollectionFloorPrice>
-                        Floor price:{" "}
-                        <StyledHotCollectionFloorPriceSVG>
-                          <Harmony />
-                        </StyledHotCollectionFloorPriceSVG>{" "}
-                        {price}
-                      </StyledHotCollectionFloorPrice>
-                    </div>
-                  </StyledHotCollection>
+                {item.map(({ id, address }, i) => (
+                  <HotCollection id={id} address={address} key={i} />
                 ))}
               </FlexibleDiv>
             ))}

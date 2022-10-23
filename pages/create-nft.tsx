@@ -18,7 +18,7 @@ import { NFTStorage, File } from "nft.storage";
 import { useState } from "react";
 
 const CreateNFT: NextPage = () => {
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFile, setImageFile] = useState<File | null | string>(null);
   const [uploading, setUploading] = useState<boolean>(false);
 
   const gateway = "https://nftstorage.link/ipfs/";
@@ -123,7 +123,11 @@ const CreateNFT: NextPage = () => {
             </Col>
           </Row>
           <CreateItemButton
-            onClick={() => imageFile && storeAsset(imageFile)}
+            onClick={() =>
+              typeof imageFile !== "string" &&
+              imageFile &&
+              storeAsset(imageFile)
+            }
             loading={uploading}
             height="60px"
           >

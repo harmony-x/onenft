@@ -73,6 +73,44 @@ export const GlobalStyles = createGlobalStyle`
   .ant-dropdown-arrow {
     display: none;
   }
+  .ant-select-dropdown {
+    background-color: #2D2F43;
+  }
+  .ant-select-item {
+    color: rgba(255, 255, 255, 0.67);
+    font-weight: 300;
+  }
+  .ant-select-item-option-active:not(.ant-select-item-option-disabled), .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background-color: #242636;
+    color: rgba(255, 255, 255, 0.87);
+  }
+  
+  .ant-message-notice-content {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 8px;
+    border: 1px solid;
+    .toast-success & {
+      border-color: #2D2F43;
+      border-radius: 8px;
+      background: #2D2F43;
+      color: #FFFFFF;
+    }
+    .toast-error & {
+      border-color: #2D2F43;
+      border-radius: 8px;
+      background: #2D2F43;
+      color: #FFFFFF;
+    }
+  }
+  .ant-message-custom-content {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 16px;
+  }
 
   /* @media (prefers-color-scheme: dark) {
     html {

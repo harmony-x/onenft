@@ -53,7 +53,8 @@ export const Catgegory = styled.li`
   }
 `;
 
-export const CatgegoryInner = styled.div`
+export const CatgegoryInner = styled.a`
+  display: block;
   width: 100%;
   position: relative;
   min-height: 184px;

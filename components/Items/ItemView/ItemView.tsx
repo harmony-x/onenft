@@ -148,7 +148,6 @@ const ItemView: FC<IItemViewProps> = ({
           <StyledItemViewContentText as="p">$20.56</StyledItemViewContentText>
         </ItemViewPrice>
         {button}
-        <StyledItemViewContentText as="sub">$20.56</StyledItemViewContentText>
         {/* Check other buy conditions here */}
         <ItemViewTab>
           <ItemViewTab.TabPane key="1" tab="About Creator">

@@ -2,7 +2,7 @@ import { Discord } from "$svgs/discord";
 import { Medium } from "$svgs/medium";
 import { Telegram } from "$svgs/telegram";
 import { Twitter } from "$svgs/twitter";
-import { FooterLink, Menu, Social } from "$types/global";
+import { Category, FooterLink, Menu, Social } from "$types/global";
 
 export const headerLinks = [
   {
@@ -135,58 +135,16 @@ export const explore = [
 
 export const hotCollections = [
   {
-    image: "",
-    name: "Melody NFT",
-    price: 100,
     id: 1,
+    address: "0x5e74dAD0e6743683e29D6f8aDd7a96398709a733",
   },
   {
-    image: "",
-    name: "Melody NFT",
-    price: 100,
     id: 2,
+    address: "0xd114BaFb0c6A9D075C66515c8E4601c26a431b3e",
   },
   {
-    image: "",
-    name: "Melody NFT",
-    price: 100,
     id: 3,
-  },
-  {
-    image: "",
-    name: "Melody NFT",
-    price: 100,
-    id: 4,
-  },
-  {
-    image: "",
-    name: "Melody NFT",
-    price: 100,
-    id: 5,
-  },
-  {
-    image: "",
-    name: "Melody NFT",
-    price: 100,
-    id: 6,
-  },
-  {
-    image: "",
-    name: "Melody NFT",
-    price: 100,
-    id: 7,
-  },
-  {
-    image: "",
-    name: "Melody NFT",
-    price: 100,
-    id: 8,
-  },
-  {
-    image: "",
-    name: "Melody NFT",
-    price: 100,
-    id: 9,
+    address: "0xd0ca730BF83c9236265574A00C7f0B2A5db5eCCF",
   },
 ];
 
@@ -248,5 +206,42 @@ export const activity = [
     key: 6,
   },
 ];
+
+export const categories: {
+  name: Category;
+  image: string;
+}[] = [
+  {
+    name: "art",
+    image:
+      "https://res.cloudinary.com/dexg5uy3d/image/upload/v1666539937/WhatsApp_Image_2022-10-23_at_16.44.09_bpzyv8.jpg",
+  },
+  {
+    name: "music",
+    image:
+      "https://res.cloudinary.com/dexg5uy3d/image/upload/v1666539937/WhatsApp_Image_2022-10-23_at_16.44.08_vy5wom.jpg",
+  },
+  {
+    name: "trading card",
+    image:
+      "https://res.cloudinary.com/dexg5uy3d/image/upload/v1666539937/WhatsApp_Image_2022-10-23_at_16.44.07_lrk1vf.jpg",
+  },
+  {
+    name: "collectibles",
+    image:
+      "https://res.cloudinary.com/dexg5uy3d/image/upload/v1666539937/WhatsApp_Image_2022-10-23_at_16.44.06_ca1t6w.jpg",
+  },
+  {
+    name: "photography",
+    image:
+      "https://res.cloudinary.com/dexg5uy3d/image/upload/v1666539936/WhatsApp_Image_2022-10-23_at_16.44.05_u3vs1j.jpg",
+  },
+  {
+    name: "virtual world",
+    image:
+      "https://res.cloudinary.com/dexg5uy3d/image/upload/v1666539936/WhatsApp_Image_2022-10-23_at_16.44.04_z8xgou.jpg",
+  },
+];
+
 export const accessTokenKey = "oneNFT_accessToken";
 export const MARKETPLACE_ADDRESS = "0xEEF20045d1CC0A94D6D4Ee02dbB677FfFE45D9B9";

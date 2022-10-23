@@ -30,7 +30,7 @@ const ItemCard: FC<IItemCardProps> = ({ id, tokenId }) => {
       ) : (
         <StyledItemCardImage>
           <Image
-            src={data.items[0].nft_data[0]?.external_data.image ?? "" ?? ""}
+            src={data.items[0].nft_data[0]?.external_data?.image ?? "" ?? ""}
             alt=""
             // layout="fill"
             width="100%"
@@ -59,7 +59,7 @@ const ItemCard: FC<IItemCardProps> = ({ id, tokenId }) => {
           </StyledItemCardCreator>
           <StyledItemCardDetails>
             <StyledItemCardName>
-              {data.items[0].nft_data[0]?.external_data.name ?? ""}
+              {data.items[0].nft_data[0]?.external_data?.name ?? ""}
             </StyledItemCardName>
             <StyledItemCardPrice>
               <span className="span">Price:</span> <br />

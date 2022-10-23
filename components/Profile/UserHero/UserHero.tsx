@@ -49,7 +49,9 @@ const UserHero: FC<IUserHero> = ({ id }) => {
         >
           <FlexibleDiv gap="8px">
             <HeadingTwo>
-              {isLoadingUser ? "...." : userData?.name ?? "Set username"}
+              {isLoadingUser
+                ? "...."
+                : userData?.name ?? userData?.address ?? "-"}
             </HeadingTwo>
           </FlexibleDiv>
           <Button
