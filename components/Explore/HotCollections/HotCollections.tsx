@@ -34,7 +34,7 @@ const HotCollection: FC<{ id: number; address: string }> = ({
 
   return (
     <StyledHotCollection>
-      {isLoading ? null : (
+      {
         <Link href={`collections/${address}`}>
           <a>
             <StyledHotCollectionNumbering>{id}.</StyledHotCollectionNumbering>
@@ -43,7 +43,7 @@ const HotCollection: FC<{ id: number; address: string }> = ({
                 objectFit="cover"
                 layout="fill"
                 alt=""
-                src={data?.image ?? "/default-avartar.png"}
+                src={data?.image ?? ""}
               />
               <Verified />
             </StyledHotCollectionImage>
@@ -51,17 +51,19 @@ const HotCollection: FC<{ id: number; address: string }> = ({
               <HeadingFour mb="2px" as="p">
                 {data?.name ? applyEllipsis(data?.name, 9) : ""}
               </HeadingFour>
-              <StyledHotCollectionFloorPrice>
-                Floor price:{" "}
-                <StyledHotCollectionFloorPriceSVG>
-                  <Harmony />
-                </StyledHotCollectionFloorPriceSVG>{" "}
-                100
-              </StyledHotCollectionFloorPrice>
+              {!isLoading ? (
+                <StyledHotCollectionFloorPrice>
+                  Floor price:{" "}
+                  <StyledHotCollectionFloorPriceSVG>
+                    <Harmony />
+                  </StyledHotCollectionFloorPriceSVG>{" "}
+                  100
+                </StyledHotCollectionFloorPrice>
+              ) : null}
             </div>
           </a>
         </Link>
-      )}
+      }
     </StyledHotCollection>
   );
 };
@@ -116,6 +118,20 @@ const HotCollections = () => {
           {/* Content of Tab Pane 2 */}
         </HotCollectionsTab.TabPane>
         <HotCollectionsTab.TabPane tab="Show all" key="3">
+          <StyledHotCollections>
+            {splitHotCollections.map((item, i) => (
+              <FlexibleDiv
+                key={i}
+                alignItems="flex-start"
+                justifyContent="flex-start"
+                flexDir="column"
+              >
+                {item.map(({ id, address }, i) => (
+                  <HotCollection id={id} address={address} key={i} />
+                ))}
+              </FlexibleDiv>
+            ))}
+          </StyledHotCollections>
           {/* Content of Tab Pane 3 */}
         </HotCollectionsTab.TabPane>
       </HotCollectionsTab>
