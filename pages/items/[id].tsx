@@ -26,9 +26,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { Web3Provider } from "@ethersproject/providers";
-import { useWeb3React } from "@web3-react/core";
 import { marketContract } from "contract-factory";
+import { useAccount, useProvider, useSigner } from "wagmi";
 
 interface ItemProps {
   query: {
@@ -51,16 +50,20 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
     ["singleCollectionNFTs", id],
     () => getSingleCollectionNFTs(id)
   );
-  const { library, account, active } = useWeb3React<Web3Provider>();
+  const { data: signer } = useSigner();
+  const defaultProvider = useProvider();
+  const provider = signer ?? defaultProvider;
+  const { isDisconnected } = useAccount();
 
   // @akindeji
   // You can manage the onClick logic else where if needed
   const onBuyClick = async () => {
     // remember to check if the user is connected
+    if (isDisconnected) return;
     // remember to disable clicking on pressing the button, can enable it in finally block
     try {
-      const tx = await marketContract(library).buyNft(
-        // put actual nft address
+      const tx = await marketContract(provider).buyNft(
+        // put actual nft contract address
         "0x5FbDB2315678afecb367f032d93F642f64180aa3",
         // put actual nft id
         1

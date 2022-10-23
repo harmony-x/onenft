@@ -10,8 +10,6 @@ import { getNFTTransactions, NFTTransaction } from "$utils/api";
 import { activity } from "$utils/data";
 import { truncateAddress } from "$utils/functions";
 import { ColumnsType } from "antd/lib/table";
-import { Web3Provider } from "@ethersproject/providers";
-import { useWeb3React } from "@web3-react/core";
 import { marketContract } from "contract-factory";
 import { FC } from "react";
 import {
@@ -25,6 +23,7 @@ import {
 import { IItemViewProps } from "./ItemView.types";
 import { useQuery } from "react-query";
 import { Image } from "antd";
+import { useAccount, useProvider, useSigner } from "wagmi";
 
 const ItemView: FC<IItemViewProps> = ({
   button,
@@ -79,16 +78,20 @@ const ItemView: FC<IItemViewProps> = ({
       dataIndex: "time",
     },
   ];
-  const { library, account, active } = useWeb3React<Web3Provider>();
+  const { data: signer } = useSigner();
+  const defaultProvider = useProvider();
+  const provider = signer ?? defaultProvider;
+  const { isDisconnected } = useAccount();
 
   // @akindeji
   // You can manage the onClick logic else where if needed
   const onClick = async () => {
     // remember to check if the user is connected
+    if (isDisconnected) return;
     // remember to disable clicking on pressing the button, can enable it in finally block
     try {
-      const tx = await marketContract(library).buyNft(
-        // put actual nft address
+      const tx = await marketContract(provider).buyNft(
+        // put actual nft contract address
         "0x5FbDB2315678afecb367f032d93F642f64180aa3",
         // put actual nft id
         1

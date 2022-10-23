@@ -1,10 +1,8 @@
 import { OneNftMarket__factory, OwnableNft__factory } from "typechain-types";
-import { useSigner } from "wagmi";
 
 export const marketContract = (provider: any) => {
-  const signer = provider.getSigner();
-  // ADD contract address here
-  return OneNftMarket__factory.connect("0x0", signer);
+  // ADD actual contract address here
+  return OneNftMarket__factory.connect("0x5FbDB2315678afecb367f032d93F642f64180aa3", provider);
 };
 
 export const deployNftContract = async (
