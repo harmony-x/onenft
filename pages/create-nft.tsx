@@ -14,7 +14,7 @@ import useAuthenticate from "$hooks/useAuthenticate";
 import MainLayout from "$layouts/MainLayout/MainLayout";
 import { getProfile } from "$utils/api";
 import { accessTokenKey } from "$utils/data";
-import { Col, Row } from "antd";
+import { Col, Form, Row } from "antd";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { NFTStorage, File } from "nft.storage";
@@ -60,6 +60,7 @@ const CreateNFT: NextPage = () => {
       setUploading(false);
     }
   }
+  const [form] = Form.useForm();
 
   useAuthenticate();
 
@@ -72,91 +73,107 @@ const CreateNFT: NextPage = () => {
       </Head>
       <MainLayout>
         <CreateLayout>
-          <HeadingTwo mb="53px">Create new Item</HeadingTwo>
-          <Row gutter={{ xs: 24, lg: 32 }}>
-            <Col xs={{ span: 24 }} md={{ span: 12 }}>
-              <HeadingFive mb="24px">
-                Image, Video, Audio or 3D Model
-              </HeadingFive>
-              <HeadingSix
-                mb="32px"
-                weight="300"
-                color="rgba(255, 255, 255, 0.47)"
-              >
-                File types supported: JPG, PNG, GIF, MP4, WEBM. Max size: 100MB
-              </HeadingSix>
-              <ImageUpload
-                imageFile={imageFile}
-                setImageFile={setImageFile}
-                mb="32px"
-              />
-              <HeadingFive mb="24px">Add to collection</HeadingFive>
-              <HeadingSix
-                mb="32px"
-                weight="300"
-                color="rgba(255, 255, 255, 0.47)"
-              >
-                This is the collection where your item will appear{" "}
-              </HeadingSix>
-              <Select
-                value={collectionsSelect}
-                onChange={(e) => setCollectionsSelect(e as string)}
-                options={
-                  getProfileData?.collections?.map(({ address, name }) => ({
-                    value: address,
-                    label: name,
-                  })) ?? []
-                }
-                height="50px"
-                placeholder="Select Collection"
-                mb="32px"
-              />
-            </Col>
-            <Col xs={{ span: 24 }} md={{ span: 12 }}>
-              <HeadingFive mb="24px">Item Name</HeadingFive>
-              <Input
-                placeholder="Type item name"
-                width="100%"
-                border="1.5px solid #3D405C"
-                bgColor="transparent"
-                mb="32px"
-              />
-              <HeadingFive mb="24px">Item Description</HeadingFive>
-              <TextArea
-                placeholder="Provide a detailed description for your item"
-                width="100%"
-                border="1.5px solid #3D405C"
-                maxLength={300}
-                mb="32px"
-              />
-              <HeadingFive mb="24px">Supply</HeadingFive>
-              <HeadingSix
-                mb="32px"
-                weight="300"
-                color="rgba(255, 255, 255, 0.47)"
-              >
-                The number of items that can be minted
-              </HeadingSix>
-              <Input
-                placeholder="1"
-                width="100%"
-                border="1.5px solid #3d405c"
-                mb="32px"
-                bgColor="transparent"
-              />
-            </Col>
-          </Row>
-          <CreateItemButton
-            onClick={() =>
-              typeof imageFile !== "string" &&
-              imageFile &&
-              storeAsset(imageFile)
-            }
-            loading={uploading}
-            height="60px"
+          <Form
+            form={form}
+            name="create-nft"
+            autoComplete="off"
+            layout="vertical"
+            requiredMark={false}
           >
-            Create Item
-          </CreateItemButton>
+            <HeadingTwo mb="53px">Create new Item</HeadingTwo>
+            <Row gutter={{ xs: 24, lg: 32 }}>
+              <Col xs={{ span: 24 }} md={{ span: 12 }}>
+                <HeadingFive mb="24px">
+                  Image, Video, Audio or 3D Model
+                </HeadingFive>
+                <HeadingSix
+                  mb="32px"
+                  weight="300"
+                  color="rgba(255, 255, 255, 0.47)"
+                >
+                  File types supported: JPG, PNG, GIF, MP4, WEBM. Max size:
+                  100MB
+                </HeadingSix>
+                <ImageUpload
+                  imageFile={imageFile}
+                  setImageFile={setImageFile}
+                  mb="32px"
+                />
+                <HeadingFive mb="24px">Add to collection</HeadingFive>
+                <HeadingSix
+                  mb="32px"
+                  weight="300"
+                  color="rgba(255, 255, 255, 0.47)"
+                >
+                  This is the collection where your item will appear{" "}
+                </HeadingSix>
+                <Form.Item
+                  name="collection"
+                  rules={[
+                    { required: true, message: "This field is required" },
+                  ]}
+                >
+                  <Select
+                    value={collectionsSelect}
+                    onChange={(e) => setCollectionsSelect(e as string)}
+                    options={
+                      getProfileData?.collections?.map(({ address, name }) => ({
+                        value: address,
+                        label: name,
+                      })) ?? []
+                    }
+                    height="50px"
+                    placeholder="Select Collection"
+                    mb="32px"
+                  />
+                </Form.Item>
+              </Col>
+              <Col xs={{ span: 24 }} md={{ span: 12 }}>
+                <HeadingFive mb="24px">Item Name</HeadingFive>
+                <Form.Item
+                  name="name"
+                  rules={[
+                    { required: true, message: "This field is required" },
+                  ]}
+                >
+                  <Input
+                    placeholder="Type item name"
+                    width="100%"
+                    border="1.5px solid #3D405C"
+                    bgColor="transparent"
+                    mb="32px"
+                  />
+                </Form.Item>
+                <HeadingFive mb="24px">Item Description</HeadingFive>
+                <Form.Item
+                  name="description"
+                  rules={[
+                    { required: true, message: "This field is required" },
+                  ]}
+                >
+                  <TextArea
+                    placeholder="Provide a detailed description for your item"
+                    width="100%"
+                    border="1.5px solid #3D405C"
+                    maxLength={300}
+                    mb="32px"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            <CreateItemButton
+              htmlType="submit"
+              onClick={() =>
+                typeof imageFile !== "string" &&
+                imageFile &&
+                storeAsset(imageFile)
+              }
+              loading={uploading}
+              height="60px"
+            >
+              Create Item
+            </CreateItemButton>
+          </Form>
         </CreateLayout>
       </MainLayout>
     </div>
