@@ -10,16 +10,26 @@ import {
   CreateLayout,
 } from "$components/Create/CreateLayout/CreateLayout.styles";
 import ImageUpload from "$components/Create/ImageUpload/ImageUpload";
+import useAuthenticate from "$hooks/useAuthenticate";
 import MainLayout from "$layouts/MainLayout/MainLayout";
+import { getProfile } from "$utils/api";
+import { accessTokenKey } from "$utils/data";
 import { Col, Row } from "antd";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { NFTStorage, File } from "nft.storage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 const CreateNFT: NextPage = () => {
   const [imageFile, setImageFile] = useState<File | null | string>(null);
   const [uploading, setUploading] = useState<boolean>(false);
+  const { data: getProfileData, isLoading: isLoadingGetProfile } = useQuery(
+    ["userProfile"],
+    () => getProfile()
+  );
+  const [collectionsSelect, setCollectionsSelect] =
+    useState<string>("Select Collection");
 
   const gateway = "https://nftstorage.link/ipfs/";
 
@@ -50,6 +60,8 @@ const CreateNFT: NextPage = () => {
       setUploading(false);
     }
   }
+
+  useAuthenticate();
 
   return (
     <div>
@@ -86,7 +98,19 @@ const CreateNFT: NextPage = () => {
               >
                 This is the collection where your item will appear{" "}
               </HeadingSix>
-              <Select height="50px" placeholder="Select Collection" mb="32px" />
+              <Select
+                value={collectionsSelect}
+                onChange={(e) => setCollectionsSelect(e as string)}
+                options={
+                  getProfileData?.collections?.map(({ address, name }) => ({
+                    value: address,
+                    label: name,
+                  })) ?? []
+                }
+                height="50px"
+                placeholder="Select Collection"
+                mb="32px"
+              />
             </Col>
             <Col xs={{ span: 24 }} md={{ span: 12 }}>
               <HeadingFive mb="24px">Item Name</HeadingFive>
