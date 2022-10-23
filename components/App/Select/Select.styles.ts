@@ -39,6 +39,12 @@ export const Select = styled(AntdSelect)<ISelectProps>`
     align-items: center;
     gap: 5px;
   }
+
+  &.ant-select-status-error.ant-select:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer)
+    .ant-select-selector {
+    background-color: transparent;
+  }
+
   svg {
     fill: #e4e4e7;
   }
