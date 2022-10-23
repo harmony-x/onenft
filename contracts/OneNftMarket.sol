@@ -51,14 +51,15 @@ contract OneNftMarket is Ownable {
         // transfer the nft to the buyer
         IERC721(nftAddress).safeTransferFrom(nftInfo.owner, msg.sender, nftId);
 
-
         // determine the royalty amounts
         uint256 contractAmount = (nftInfo.price * marketPlaceFee) / 100;
-        
+
         uint256 creatorRoyaltyAmount = ((nftInfo.price - contractAmount) *
             royaltyPercent[nftAddress]) / 100;
 
-        uint256 sellerAmount = nftInfo.price - contractAmount - creatorRoyaltyAmount;
+        uint256 sellerAmount = nftInfo.price -
+            contractAmount -
+            creatorRoyaltyAmount;
 
         // transfer the currency to the seller
         if (nftInfo.currency == address(0)) {
@@ -69,7 +70,9 @@ contract OneNftMarket is Ownable {
             payable(nftInfo.owner).transfer(sellerAmount);
             payable(address(this)).transfer(contractAmount);
             if (royaltyPercent[nftAddress] > 0) {
-                payable(Ownable(nftAddress).owner()).transfer(creatorRoyaltyAmount);
+                payable(Ownable(nftAddress).owner()).transfer(
+                    creatorRoyaltyAmount
+                );
             }
         } else {
             IERC20(nftInfo.currency).transferFrom(
@@ -89,9 +92,9 @@ contract OneNftMarket is Ownable {
                     creatorRoyaltyAmount
                 );
             }
-        }    
+        }
     }
-    
+
     // set the royalty percent for a contract, contract owner can call this
     function setRoyaltyPercent(uint256 percent, address _collectionAddress)
         public
@@ -119,4 +122,6 @@ contract OneNftMarket is Ownable {
             );
         }
     }
+
+    receive() external payable {}
 }
