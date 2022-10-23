@@ -146,6 +146,30 @@ export const hotCollections = [
     id: 3,
     address: "0xd0ca730BF83c9236265574A00C7f0B2A5db5eCCF",
   },
+  {
+    id: 4,
+    address: "0x337f741c89057026Cf9d3a1b82df5c48b03A574A",
+  },
+  {
+    id: 5,
+    address: "0x4B1DAe1F2b9cd98422b2E52595E1A8De32825903",
+  },
+  {
+    id: 6,
+    address: "0xa38a092bD015Fec61A9919F559a4C8cBB9CeE6A0",
+  },
+  {
+    id: 7,
+    address: "0x03B57fdCaA42acdadc9146459A9f0b8bB4671077",
+  },
+  {
+    id: 8,
+    address: "0x4B1DAe1F2b9cd98422b2E52595E1A8De32825903",
+  },
+  {
+    id: 9,
+    address: "0x4B1DAe1F2b9cd98422b2E52595E1A8De32825903",
+  },
 ];
 
 export const activity = [
