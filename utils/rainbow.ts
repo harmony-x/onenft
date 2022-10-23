@@ -7,7 +7,6 @@ import {
 import { SiweMessage } from "siwe";
 import { Chain, configureChains, createClient } from "wagmi";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
-import { HARMONY_RPC_SHARD_0_DEVNET_URL } from "harmony-marketplace-sdk";
 import axios from "axios";
 import { accessTokenKey } from "./data";
 
@@ -17,9 +16,9 @@ axios.defaults.baseURL = "https://monkfish-app-bmj56.ondigitalocean.app";
 const harmonyChain = {
   id: 1666700000,
   name: "Harmony Testnet Shard 0",
-  network: "harmony",
+  network: "harmony testnet",
   rpcUrls: {
-    default: HARMONY_RPC_SHARD_0_DEVNET_URL,
+    default: "https://api.s0.b.hmny.io",
   },
   blockExplorers: {
     default: {
