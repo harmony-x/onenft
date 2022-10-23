@@ -136,7 +136,7 @@ export const explore = [
 export const hotCollections = [
   {
     id: 1,
-    address: "0x5e74dAD0e6743683e29D6f8aDd7a96398709a733",
+    address: "0xfa7E117f11F63386e541cA5969ae6F49286e5AF2",
   },
   {
     id: 2,
@@ -164,11 +164,11 @@ export const hotCollections = [
   },
   {
     id: 8,
-    address: "0x4B1DAe1F2b9cd98422b2E52595E1A8De32825903",
+    address: "0xfa7E117f11F63386e541cA5969ae6F49286e5AF2",
   },
   {
     id: 9,
-    address: "0x4B1DAe1F2b9cd98422b2E52595E1A8De32825903",
+    address: "0x5e74dAD0e6743683e29D6f8aDd7a96398709a733",
   },
 ];
 
