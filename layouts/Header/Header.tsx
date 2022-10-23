@@ -40,7 +40,7 @@ const Header: FC<IHeaderProps> = ({ searchString }) => {
             onChange={(e) => setSearch(e.target.value)}
             onPressEnter={() => router.push(`/search?search=${search}`)}
             prefix={<Search />}
-            placeholder="Search by items/User/Address"
+            placeholder="Search by collection/User/Address"
             width="100%"
           />
         </InputContainer>
