@@ -26,6 +26,8 @@ import { useMutation, useQueryClient } from "react-query";
 import { postCollection } from "$utils/api";
 import { Category } from "$types/global";
 import toast from "$utils/toast";
+import useAuthenticate from "$hooks/useAuthenticate";
+import { useRouter } from "next/router";
 
 const CreateCollection: NextPage = () => {
   const [imageFile, setImageFile] = useState<string | null | File>("");
@@ -43,7 +45,9 @@ const CreateCollection: NextPage = () => {
       queryClient.invalidateQueries(["collections"]);
     },
   });
+  const router = useRouter();
   const [form] = Form.useForm();
+  useAuthenticate();
 
   return (
     <div>
@@ -102,6 +106,7 @@ const CreateCollection: NextPage = () => {
                 onSuccess: () => {
                   toast("success", "Created collection successfully");
                   form.resetFields();
+                  router.push("/my-collections");
                 },
                 onError: () => {
                   toast("error", "Failed to create collection");

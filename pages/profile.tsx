@@ -3,6 +3,7 @@ import { FlexibleDiv } from "$components/Box/Box.styles";
 import ItemCard from "$components/Items/ItemCard/ItemCard";
 import { ItemsTab } from "$components/Items/ItemsTab/ItemsTab.styles";
 import ProfileHero from "$components/Profile/ProfileHero/ProfileHero";
+import useAuthenticate from "$hooks/useAuthenticate";
 import MainLayout from "$layouts/MainLayout/MainLayout";
 import { getProfile, getUserNFTs } from "$utils/api";
 import { Col, Row } from "antd";
@@ -35,6 +36,8 @@ const Profile: NextPage = () => {
       refetchUserNFTs();
     }
   }, [getProfileData, refetchUserNFTs]);
+
+  useAuthenticate();
 
   return (
     <div>
