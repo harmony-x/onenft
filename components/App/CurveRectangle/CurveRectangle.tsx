@@ -4,7 +4,7 @@ import { ICurveRectangleProps } from "./CurveRectangle.types";
 
 const CurveRectangle: FC<ICurveRectangleProps> = ({ text }) => (
   <StyledCurveRectangle as="p" alignItems="center" justifyContent="center">
-    {text}
+    <span>{text}</span>
   </StyledCurveRectangle>
 );
 
