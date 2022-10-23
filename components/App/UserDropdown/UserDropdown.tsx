@@ -41,7 +41,7 @@ const UserDropdown: FC<IUserDropdownProps> = ({ children }) => {
     {
       key: "3",
       label: (
-        <Link href="/create-collection">
+        <Link href="/my-collections">
           <MenuLinkContainer as="a" gap="8px" justifyContent="flex-start">
             <Collection />
             <MenuText>My Collection</MenuText>
