@@ -44,13 +44,6 @@ interface ItemProps {
 const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
   const [buySellModal, setBuySellModal] = useState<boolean>(false);
   const [mode, setMode] = useState<"buy" | "sell">("buy");
-  const {
-    data: NFTData,
-    isLoading: isLoadingNFT,
-    isSuccess: NFTSuccss,
-  } = useQuery(["nftMetaData", id, token_id], () =>
-    getSingleNFTMetaData(id, token_id)
-  );
   const { data: tokenMetaData, isLoading: isLoadingTokenData } = useQuery(
     ["tokenMetaData", id, token_id],
     () => getSingleTokenMetaData(id, token_id)
@@ -92,6 +85,60 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
   };
 
   const router = useRouter();
+
+  const tokens = [
+    {
+      name: "ONE",
+      address: "0x0000000000000000000000000000000000000000",
+      decimals: 18,
+    },
+    {
+      name: "USDT",
+      address: "0x51f68cd4eba5afb92899871b0a46da51f9808b90",
+      decimals: 18,
+    },
+  ];
+
+  // @akindeji
+  const onSellClick = async () => {
+    // remember to check if the user is connected
+    if (isDisconnected) return;
+    // remember to disable clicking on pressing the button, can enable it in finally block
+    try {
+      const tx = await marketContract(provider).listNft(
+        // put the actual nft contract address
+        "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        // put the actual nft id
+        1,
+        // put actual price (100 in this case), then use selected token decimals, although it's the same for the 2 tokens
+        100 * Math.pow(10, tokens[0].decimals),
+        // put selected token address as currency
+        tokens[0].address,
+        // put actual deadline timestamp
+        1666636922
+      );
+      // wait for two confirmations
+      await tx.wait(2);
+      // refresh page or something, just make sure new owner shows and all
+    } catch (error) {
+      console.log(error);
+      // handle error, a generic message showing item couldn't be bought works
+    }
+  };
+
+  // @akindeji
+  const getNftInfo = async () => {
+    // no need to check a connected account here, just get the nft info
+    // you can use this anywhere you need to fetch nft info, maybe make it a utility or something
+    // checkout the type of data returned from this
+    // owner and currency are addresses, price and deadline are numbers
+    const nftInfo = await marketContract(provider).nftInfos(
+      // put actual nft contract address
+      "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      // put actual nft id
+      1
+    );
+  };
 
   return (
     <div>
