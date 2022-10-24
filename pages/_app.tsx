@@ -41,6 +41,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       setStatus("unauthenticated");
     }
   }
+
   return (
     <AppContextProvider
       value={{
