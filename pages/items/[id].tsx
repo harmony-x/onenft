@@ -18,7 +18,12 @@ import {
 } from "$components/Items/ItemView/ItemView.styles";
 import MainLayout from "$layouts/MainLayout/MainLayout";
 import { Harmony } from "$svgs/harmony";
-import { getSingleCollectionNFTs, getSingleNFTMetaData } from "$utils/api";
+import {
+  getCollection,
+  getSingleCollectionNFTs,
+  getSingleNFTMetaData,
+  getSingleTokenMetaData,
+} from "$utils/api";
 import { Col, Row, Skeleton } from "antd";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
@@ -46,10 +51,19 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
   } = useQuery(["nftMetaData", id, token_id], () =>
     getSingleNFTMetaData(id, token_id)
   );
+  const { data: tokenMetaData, isLoading: isLoadingTokenData } = useQuery(
+    ["tokenMetaData", id, token_id],
+    () => getSingleTokenMetaData(id, token_id)
+  );
   const { data: collectionsData, isLoading: isLoadingCollections } = useQuery(
     ["singleCollectionNFTs", id],
     () => getSingleCollectionNFTs(id)
   );
+  const { data: collectionData, isLoading: isLoadingCollection } = useQuery(
+    ["collection", id],
+    () => getCollection({ address: id })
+  );
+
   const { data: signer } = useSigner();
   const defaultProvider = useProvider();
   const provider = signer ?? defaultProvider;
@@ -79,60 +93,6 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
 
   const router = useRouter();
 
-  const tokens = [
-    {
-      name: "ONE",
-      address: "0x0000000000000000000000000000000000000000",
-      decimals: 18,
-    },
-    {
-      name: "USDT",
-      address: "0x51f68cd4eba5afb92899871b0a46da51f9808b90",
-      decimals: 18,
-    },
-  ];
-
-  // @akindeji
-  const onSellClick = async () => {
-    // remember to check if the user is connected
-    if (isDisconnected) return;
-    // remember to disable clicking on pressing the button, can enable it in finally block
-    try {
-      const tx = await marketContract(provider).listNft(
-        // put the actual nft contract address
-        "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-        // put the actual nft id
-        1,
-        // put actual price (100 in this case), then use selected token decimals, although it's the same for the 2 tokens
-        100 * Math.pow(10, tokens[0].decimals),
-        // put selected token address as currency
-        tokens[0].address,
-        // put actual deadline timestamp
-        1666636922
-      );
-      // wait for two confirmations
-      await tx.wait(2);
-      // refresh page or something, just make sure new owner shows and all
-    } catch (error) {
-      console.log(error);
-      // handle error, a generic message showing item couldn't be bought works
-    }
-  };
-
-  // @akindeji
-  const getNftInfo = async () => {
-    // no need to check a connected account here, just get the nft info
-    // you can use this anywhere you need to fetch nft info, maybe make it a utility or something
-    // checkout the type of data returned from this
-    // owner and currency are addresses, price and deadline are numbers
-   const nftInfo = await marketContract(provider).nftInfos(
-      // put actual nft contract address
-      "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-      // put actual nft id
-      1
-    );
-  };
-
   return (
     <div>
       <Head>
@@ -141,7 +101,7 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MainLayout>
-        {isLoadingNFT || !NFTData ? (
+        {isLoadingTokenData || !tokenMetaData ? (
           <Skeleton active paragraph={{ rows: 10 }} />
         ) : (
           <>
@@ -161,15 +121,11 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
                   {mode === "buy" ? "Buy now" : "Sell Item"}
                 </ItemViewButton>
               }
-              creatorName={NFTData.items[0].contract_name}
-              description={
-                NFTData.items[0].nft_data[0]?.external_data?.description ?? ""
-              }
-              ownerName={NFTData.items[0].nft_data[0]?.owner_address ?? ""}
-              itemName={NFTData.items[0].nft_data[0]?.external_data.name ?? ""}
-              itemImage={
-                NFTData.items[0].nft_data[0]?.external_data.image ?? ""
-              }
+              creatorName={"Name"}
+              description={tokenMetaData.data.description ?? ""}
+              ownerName={collectionData?.name ?? ""}
+              itemName={tokenMetaData.data.name ?? ""}
+              itemImage={tokenMetaData.data.image ?? ""}
             />
             <HeadingThree mb="45px">More from this collection</HeadingThree>
             {isLoadingCollections || !collectionsData ? null : (
@@ -271,10 +227,7 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
                   prefix={
                     <ItemViewSelect
                       height="15px"
-                      options={tokens.map((token) => ({
-                        value: token.address,
-                        label: token.name,
-                      }))}
+                      options={[{ value: "ONE", label: "ONE" }]}
                     />
                   }
                 />
@@ -295,7 +248,7 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
                 : "linear-gradient(45deg, #E23B49 6.89%, #8084DC 93.89%)"
             }
             width="100%"
-            onClick={mode === "buy" ? onBuyClick : onSellClick}
+            onClick={mode === "buy" ? onBuyClick : () => console.log("sell")}
           >
             {mode === "buy" ? "Buy now" : "Sell Item"}
           </ItemViewModalButton>
