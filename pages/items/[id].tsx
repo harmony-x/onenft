@@ -96,6 +96,7 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
   const onSellClick = async () => {
     // remember to check if the user is connected
     if (isDisconnected) return;
+    console.log("sell");
     // remember to disable clicking on pressing the button, can enable it in finally block
     try {
       const tx = await marketContract(provider).listNft(
