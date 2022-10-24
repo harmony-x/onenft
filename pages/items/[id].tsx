@@ -79,6 +79,46 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
 
   const router = useRouter();
 
+  const tokens = [
+    {
+      name: "ONE",
+      address: "0x0000000000000000000000000000000000000000",
+      decimals: 18,
+    },
+    {
+      name: "USDT",
+      address: "0x51f68cd4eba5afb92899871b0a46da51f9808b90",
+      decimals: 18,
+    },
+  ];
+
+  // @akindeji
+  const onSellClick = async () => {
+    // remember to check if the user is connected
+    if (isDisconnected) return;
+    // remember to disable clicking on pressing the button, can enable it in finally block
+    try {
+      const tx = await marketContract(provider).listNft(
+        // put the actual nft contract address
+        "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        // put the actual nft id
+        1,
+        // put actual price (100 in this case), then use selected token decimals, although it's the same for the 2 tokens
+        100 * Math.pow(10, tokens[0].decimals),
+        // put selected token address as currency
+        tokens[0].address,
+        // put actual deadline timestamp
+        1666636922
+      );
+      // wait for two confirmations
+      await tx.wait(2);
+      // refresh page or something, just make sure new owner shows and all
+    } catch (error) {
+      console.log(error);
+      // handle error, a generic message showing item couldn't be bought works
+    }
+  };
+
   return (
     <div>
       <Head>
@@ -217,7 +257,10 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
                   prefix={
                     <ItemViewSelect
                       height="15px"
-                      options={[{ value: "ONE", label: "ONE" }]}
+                      options={tokens.map((token) => ({
+                        value: token.address,
+                        label: token.name,
+                      }))}
                     />
                   }
                 />
@@ -238,7 +281,7 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
                 : "linear-gradient(45deg, #E23B49 6.89%, #8084DC 93.89%)"
             }
             width="100%"
-            onClick={mode === "buy" ? onBuyClick : () => console.log("sell")}
+            onClick={mode === "buy" ? onBuyClick : onSellClick}
           >
             {mode === "buy" ? "Buy now" : "Sell Item"}
           </ItemViewModalButton>
