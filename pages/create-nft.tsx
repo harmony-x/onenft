@@ -15,11 +15,13 @@ import MainLayout from "$layouts/MainLayout/MainLayout";
 import { getProfile } from "$utils/api";
 import { accessTokenKey } from "$utils/data";
 import { Col, Form, Row } from "antd";
+import { nftContract } from "contract-factory";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { NFTStorage, File } from "nft.storage";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { useAccount, useProvider, useSigner } from "wagmi";
 
 const CreateNFT: NextPage = () => {
   const [imageFile, setImageFile] = useState<File | null | string>(null);
@@ -31,6 +33,11 @@ const CreateNFT: NextPage = () => {
   const [collectionsSelect, setCollectionsSelect] =
     useState<string>("Select Collection");
 
+  const { data: signer } = useSigner();
+  const defaultProvider = useProvider();
+  const provider = signer ?? defaultProvider;
+  const { isDisconnected, address } = useAccount();
+
   const gateway = "https://nftstorage.link/ipfs/";
 
   const keyA =
@@ -39,17 +46,26 @@ const CreateNFT: NextPage = () => {
     "jM0M2Y0UiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY2NjMwNDcxMTA1MywibmFtZSI6Im9uZW5mdCJ9.pTlZT05HJrIZWyuVlQJc1Vh0y6F_-P24HAZRYgMsCE0";
 
   async function storeAsset(image: File) {
+    if(isDisconnected) return;
     // setImageUrl(null);
     try {
       setUploading(true);
       const client = new NFTStorage({ token: keyA + keyB });
       const metadata = await client.store({
+        // replace name and description with your own
         name: "Test NFT",
         description: "This Test NFT is da best!",
         image,
-        supply: 3,
       });
       // setImageUrl(metadata.data.image.href.replace("ipfs://", gateway));
+      const tx = await nftContract(collectionsSelect, provider).mint(
+        // address can't be null if connected
+        address!,
+        metadata.url,
+      );
+      // wait for the transaction to be confirmed twice
+      const s = await tx.wait(2);
+      // redirect to collection page
       console.log(
         "Metadata stored on Filecoin and IPFS with URL:",
         encodeURI(metadata.data.image.href.replace("ipfs://", gateway))
