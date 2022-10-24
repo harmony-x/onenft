@@ -119,6 +119,20 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
     }
   };
 
+  // @akindeji
+  const getNftInfo = async () => {
+    // no need to check a connected account here, just get the nft info
+    // you can use this anywhere you need to fetch nft info, maybe make it a utility or something
+    // checkout the type of data returned from this
+    // owner and currency are addresses, price and deadline are numbers
+   const nftInfo = await marketContract(provider).nftInfos(
+      // put actual nft contract address
+      "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      // put actual nft id
+      1
+    );
+  };
+
   return (
     <div>
       <Head>
