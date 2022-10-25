@@ -5,6 +5,7 @@ import { Telegram } from "$svgs/telegram";
 import { Twitter } from "$svgs/twitter";
 import { USDT } from "$svgs/usdt";
 import { Category, FooterLink, Menu, Social } from "$types/global";
+import { imageAdresses } from "./imageAddress";
 
 export const headerLinks = [
   {
@@ -94,44 +95,37 @@ export const socialLinks: Social[] = [
 
 export const explore = [
   {
-    creatorName: "Hilary Rose",
-    creatorImage: "/hillary.png",
-    itemImage: "/primate.png",
-    itemTitle: "Space Hoops #1022",
-    currentBid: 10,
-    time: "2d 14h 20m",
+    creatorName: "ONENFT Team Member",
+    creatorImage: imageAdresses[0],
+    itemImage:
+      "https://nftstorage.link/ipfs/bafybeicqcmom7vabsbcxwfdvobs7ezn6algmz3sloccikocywy4qpaotl4/nlk.png",
+    itemTitle: "My NLK Membership",
+    currentBid: 1000,
+    id: "0xfa7E117f11F63386e541cA5969ae6F49286e5AF2",
+    tokenId: "0",
+    currency: "USDT",
   },
   {
-    creatorName: "Hilary Rose",
-    creatorImage: "/hillary.png",
-    itemImage: "/primate.png",
-    itemTitle: "Space Hoops #1022",
-    currentBid: 10,
-    time: "2d 14h 20m",
+    creatorName: "Rick & Morty",
+    creatorImage: imageAdresses[1],
+    itemImage:
+      "https://nftstorage.link/ipfs/bafybeiegikp77xk3s6u6634lctfjggkdiwod7jpqbbg7qstdridy4lnn2e/2880737.png",
+    itemTitle: "Rick #1",
+    currentBid: 20000,
+    id: "0x0A68785B80F84eDdcAd5D806fEc13D8D98eAE472",
+    tokenId: "0",
+    currency: "ONE",
   },
   {
-    creatorName: "PrimatesXX",
-    creatorImage: null,
-    itemImage: "/primate.png",
-    itemTitle: "Space Hoops #1022",
-    currentBid: 10,
-    time: "2d 14h 20m",
-  },
-  {
-    creatorName: "PrimatesXX",
-    creatorImage: "/hillary.png",
-    itemImage: "/primate.png",
-    itemTitle: "Space Hoops #1022",
-    currentBid: 10,
-    time: "2d 14h 20m",
-  },
-  {
-    creatorName: "Iykee",
-    creatorImage: "/hillary.png",
-    itemImage: "/primate.png",
-    itemTitle: "Space Hoops #1022",
-    currentBid: 10,
-    time: "2d 14h 20m",
+    creatorName: "ONENFT Team Member",
+    creatorImage: imageAdresses[0],
+    itemImage:
+      "https://nftstorage.link/ipfs/bafybeicqcmom7vabsbcxwfdvobs7ezn6algmz3sloccikocywy4qpaotl4/nlk.png",
+    itemTitle: "My NLK Membership",
+    currentBid: 1000,
+    id: "0xfa7E117f11F63386e541cA5969ae6F49286e5AF2",
+    tokenId: "0",
+    currency: "USDT",
   },
 ];
 
