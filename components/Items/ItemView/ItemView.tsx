@@ -7,7 +7,7 @@ import {
 } from "$components/App/Typography/Typography.styles";
 import { Harmony } from "$svgs/harmony";
 import { getNFTTransactions, NFTTransaction } from "$utils/api";
-import { activity } from "$utils/data";
+import { activity, tokens } from "$utils/data";
 import { truncateAddress } from "$utils/functions";
 import { ColumnsType } from "antd/lib/table";
 import { marketContract } from "contract-factory";
@@ -24,9 +24,11 @@ import { IItemViewProps } from "./ItemView.types";
 import { useQuery } from "react-query";
 import { Image } from "antd";
 import { useAccount, useProvider, useSigner } from "wagmi";
+import { USDT } from "$svgs/usdt";
 
 const ItemView: FC<IItemViewProps> = ({
   button,
+  creatorImage,
   creatorName,
   description,
   ownerName,
@@ -34,6 +36,8 @@ const ItemView: FC<IItemViewProps> = ({
   itemImage,
   id,
   tokenId,
+  currency,
+  price,
 }) => {
   const { data, isLoading } = useQuery(
     ["nftTransactionsData", id, tokenId],
@@ -83,26 +87,6 @@ const ItemView: FC<IItemViewProps> = ({
   const provider = signer ?? defaultProvider;
   const { isDisconnected } = useAccount();
 
-  // @akindeji
-  // You can manage the onClick logic else where if needed
-  const onClick = async () => {
-    // remember to check if the user is connected
-    if (isDisconnected) return;
-    // remember to disable clicking on pressing the button, can enable it in finally block
-    try {
-      const tx = await marketContract(provider).buyNft(
-        // put actual nft contract address
-        "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-        // put actual nft id
-        1
-      );
-      // wait for two confirmations
-      await tx.wait(2);
-      // refresh page or something, just make sure new owner shows and all
-    } catch (error) {
-      // handle error, a generic message showing item couldn't be bought works
-    }
-  };
   return (
     <StyledItemView
       as="section"
@@ -111,7 +95,13 @@ const ItemView: FC<IItemViewProps> = ({
     >
       <StyledItemViewImage>
         <Image
-          src={itemImage}
+          src={
+            itemImage
+              ? encodeURI(
+                  itemImage.replace("ipfs://", "https://nftstorage.link/ipfs/")
+                )
+              : ""
+          }
           alt=""
           width="100%"
           height="100%"
@@ -131,22 +121,42 @@ const ItemView: FC<IItemViewProps> = ({
         <CreatorDisplay
           mb="14px"
           name={creatorName}
-          img="/default-profile.jpeg"
+          img={
+            creatorImage
+              ? encodeURI(
+                  creatorImage.replace(
+                    "ipfs://",
+                    "https://nftstorage.link/ipfs/"
+                  )
+                )
+              : "/default-profile.jpeg"
+          }
         />
         <HeadingTwo mb="6px" as="h3">
           {itemName}
         </HeadingTwo>
         <StyledItemViewContentText className="owner">
-          Owned by <span className="span">{truncateAddress(ownerName)}</span>
+          Owned by{" "}
+          <span className="span">
+            {ownerName ? truncateAddress(ownerName) : "..."}
+          </span>
         </StyledItemViewContentText>
         <StyledItemViewContentText mb="15px">
           Current price
         </StyledItemViewContentText>
-        <ItemViewPrice justifyContent="flex-start">
-          <Harmony />
-          <HeadingFour>145</HeadingFour>
-          <StyledItemViewContentText as="p">$20.56</StyledItemViewContentText>
-        </ItemViewPrice>
+        {price ? (
+          <ItemViewPrice justifyContent="flex-start">
+            {tokens?.find(({ address }) => address === currency)?.name ===
+            "ONE" ? (
+              <Harmony />
+            ) : tokens?.find(({ address }) => address === currency)?.name ===
+              "USDT" ? (
+              <USDT />
+            ) : null}
+            <HeadingFour>{price ?? ""}</HeadingFour>
+            {/* <StyledItemViewContentText as="p">$20.56</StyledItemViewContentText> */}
+          </ItemViewPrice>
+        ) : null}
         {button}
         {/* Check other buy conditions here */}
         <ItemViewTab>
@@ -156,16 +166,17 @@ const ItemView: FC<IItemViewProps> = ({
           <ItemViewTab.TabPane key="2" tab="Item Activity">
             {data ? (
               <Table
-                dataSource={logs
-                  .filter(
-                    ({ decoded }) => decoded?.name.toLowerCase() === "transfer"
-                  )
-                  .map(({ block_signed_at, decoded }) => ({
-                    from: truncateAddress(decoded.params[0].value ?? ""),
-                    to: truncateAddress(decoded.params[1].value ?? ""),
-                    time: block_signed_at?.substring(0, 10),
-                    event: decoded.name,
-                  }))}
+                // dataSource={logs
+                //   .filter(
+                //     ({ decoded }) => decoded?.name.toLowerCase() === "transfer"
+                //   )
+                //   .map(({ block_signed_at, decoded }) => ({
+                //     from: truncateAddress(decoded.params[0].value ?? ""),
+                //     to: truncateAddress(decoded.params[1].value ?? ""),
+                //     time: block_signed_at?.substring(0, 10),
+                //     event: decoded.name,
+                //   }))}
+                dataSource={[]}
                 columns={columns as ColumnsType<object>}
                 loading={isLoading}
               />
