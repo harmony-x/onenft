@@ -94,12 +94,19 @@ export const StyledExploreCard = styled.div<
   border-radius: 20px;
   padding: 19px 24px;
   width: ${({ width }) => width};
+  &:hover {
+    .explore-image {
+      transform: scale(1.2);
+    }
+  }
 `;
 
 export const ExploreCardImage = styled.div`
   position: relative;
   width: 45%;
   min-height: 182px;
+  overflow: hidden;
+  border-radius: 15px;
   @media screen and (${BREAKPOINTS.sm}) {
     width: 50%;
     min-height: 348px;
@@ -108,6 +115,7 @@ export const ExploreCardImage = styled.div`
   img {
     border-radius: 15px;
     object-fit: cover;
+    transition: 0.3s ease-in-out;
   }
 `;
 
