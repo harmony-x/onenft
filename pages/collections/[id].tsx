@@ -44,7 +44,7 @@ const Collection: NextPage<CollectionProps> = ({ query: { id = "" } }) => {
           <>
             <CollectionView collection={data} isLoading={isLoading} />
             <ItemsTab mb="86px">
-              <ItemsTab.TabPane key="1" tab="Owned">
+              <ItemsTab.TabPane key="1" tab="NFTs">
                 <FlexibleDiv
                   gap="24px"
                   flexDir="column"
@@ -54,7 +54,7 @@ const Collection: NextPage<CollectionProps> = ({ query: { id = "" } }) => {
                   <Row gutter={{ md: 24, lg: 24 }}>
                     {collectionMetaData.tokens
                       .slice(0, showMore)
-                      .map(({ data: tokenData, id: tokenId }, i) => (
+                      .map(({ id: tokenId }, i) => (
                         <Link
                           key={id}
                           href={`/items/${id}?token_id=${tokenId}`}
@@ -90,26 +90,6 @@ const Collection: NextPage<CollectionProps> = ({ query: { id = "" } }) => {
                     </Button>
                   ) : null}
                 </FlexibleDiv>
-              </ItemsTab.TabPane>
-              <ItemsTab.TabPane key="2" tab="Listed">
-                <Row gutter={{ md: 24, lg: 24 }}>
-                  {[1, 2, 3].map((item) => (
-                    <Col
-                      key={item}
-                      xs={{ span: 24 }}
-                      md={{ span: 12 }}
-                      lg={{ span: 8 }}
-                      xl={{ span: 6 }}
-                    >
-                      {/* <ItemCard
-                        creator="Khyati"
-                        image="/primate.png"
-                        name="Ecotheraphy Pips #345 NFT"
-                        price={100}
-                      /> */}
-                    </Col>
-                  ))}
-                </Row>
               </ItemsTab.TabPane>
             </ItemsTab>
           </>
