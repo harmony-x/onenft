@@ -1,6 +1,7 @@
 import { Button } from "$components/App/Button/Button.styles";
 import { FlexibleDiv } from "$components/Box/Box.styles";
 import { BREAKPOINTS } from "$constants/breakpoints";
+import { Skeleton } from "antd";
 import styled from "styled-components";
 
 export const CreateLayout = styled.section`
@@ -24,6 +25,16 @@ export const MyCollectionsButton = styled(Button)`
   margin-bottom: 50px;
   @media screen and (${BREAKPOINTS.lg}) {
     margin-bottom: 80px;
+  }
+`;
+
+export const MyCollectionsAvartarSkeleton = styled(Skeleton.Avatar)`
+  width: 100%;
+  height: 349px;
+  .ant-skeleton-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
   }
 `;
 
