@@ -130,6 +130,15 @@ export interface UserResponse {
   collections: Collection[];
 }
 
+export interface Token {
+  data: {
+    name: string;
+    description: string;
+    image: string;
+  };
+  id: string;
+}
+
 const covalentKey = "ckey_1d37f91734d44443acdbb6a30bf";
 
 export const covalentApiInstance = axios.create({
@@ -160,6 +169,23 @@ export const getSingleNFTMetaData = async (address: string, token_id: string) =>
       `tokens/${address}/nft_metadata/${token_id}/?quote-currency=USD&format=JSON&key=${covalentKey}`
     )
   ).data.data;
+
+export const getCollectionMetaData = async (address: string) =>
+  await (
+    await oneNFTApiInstance.get<{ tokens: Token[] }>(
+      `/api/collection/metadata?collection_address=${address}`
+    )
+  ).data;
+
+export const getSingleTokenMetaData = async (
+  address: string,
+  token_id: string
+) =>
+  await (
+    await oneNFTApiInstance.get<Token>(
+      `/api/token/metadata?collection_address=${address}&token_id=${token_id}`
+    )
+  ).data;
 
 export const getNFTTransactions = async (address: string, token_id: string) =>
   await (
