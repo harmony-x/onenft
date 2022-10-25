@@ -10,7 +10,10 @@ import { FlexibleDiv } from "$components/Box/Box.styles";
 import ItemCard from "$components/Items/ItemCard/ItemCard";
 import ItemView from "$components/Items/ItemView/ItemView";
 import {
+  ItemFormInput,
+  ItemFormSelect,
   ItemViewButton,
+  ItemViewButtonSkeleton,
   ItemViewInput,
   ItemViewModalButton,
   ItemViewSelect,
@@ -20,19 +23,28 @@ import MainLayout from "$layouts/MainLayout/MainLayout";
 import { Harmony } from "$svgs/harmony";
 import {
   getCollection,
+  getCollectionMetaData,
   getSingleCollectionNFTs,
   getSingleNFTMetaData,
   getSingleTokenMetaData,
+  getUsers,
 } from "$utils/api";
-import { Col, Row, Skeleton } from "antd";
+import { Col, Form, Row, Skeleton } from "antd";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { marketContract } from "contract-factory";
+import { marketContract, nftContract } from "contract-factory";
 import { useAccount, useProvider, useSigner } from "wagmi";
+import { HRC721, Key } from "harmony-marketplace-sdk";
+import { OwnableNft__factory } from "typechain-types";
+import { HttpProvider, WSProvider } from "@harmony-js/network";
+import { ethers } from "ethers";
+import { MARKETPLACE_ADDRESS, tokens } from "$utils/data";
+import toast from "$utils/toast";
+import { USDT } from "$svgs/usdt";
 
 interface ItemProps {
   query: {
@@ -43,7 +55,13 @@ interface ItemProps {
 
 const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
   const [buySellModal, setBuySellModal] = useState<boolean>(false);
-  const [mode, setMode] = useState<"buy" | "sell">("buy");
+  const [mode, setMode] = useState<"buy" | "sell" | null>(null);
+  const [ownerName, setOwnerName] = useState<string>("");
+  const [ownerAddress, setOwnerAddress] = useState<string>("");
+  const [sellLoading, setSellLoading] = useState<boolean>(false);
+  const [price, setPrice] = useState<number>(0);
+  const [deadline, setDeadline] = useState<number>(0);
+  const [currency, setCurrency] = useState<string>("");
   const { data: tokenMetaData, isLoading: isLoadingTokenData } = useQuery(
     ["tokenMetaData", id, token_id],
     () => getSingleTokenMetaData(id, token_id)
@@ -56,11 +74,34 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
     ["collection", id],
     () => getCollection({ address: id })
   );
+  const { data: collectionMetaData, isLoading: isLoadingCollectionMetaData } =
+    useQuery(["collectionMetaData", id], () => getCollectionMetaData(id));
+  const { data: usersData, isLoading: isLoadingUsers } = useQuery(
+    "users",
+    getUsers
+  );
 
   const { data: signer } = useSigner();
   const defaultProvider = useProvider();
   const provider = signer ?? defaultProvider;
-  const { isDisconnected } = useAccount();
+  const { isDisconnected, address } = useAccount();
+  // const key = new Key(new HttpProvider("https://api.s0.b.hmny.io"));
+  // const contract = new HRC721(id, OwnableNft__factory.abi, key);
+  // contract
+  //   .ownerOf(token_id)
+  //   .then((res) => console.log(res))
+  //   .catch((e) => console.log(e));
+  nftContract(id, provider)
+    .ownerOf(token_id)
+    .then((res) => {
+      setOwnerName(
+        usersData?.find(({ address = "" }) => address === res)?.name ?? ""
+      );
+      setOwnerAddress(
+        usersData?.find(({ address = "" }) => address === res)?.address ?? ""
+      );
+    })
+    .catch((e) => console.log(e));
 
   // @akindeji
   // You can manage the onClick logic else where if needed
@@ -71,13 +112,15 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
     try {
       const tx = await marketContract(provider).buyNft(
         // put actual nft contract address
-        "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        id,
         // put actual nft id
-        1
+        token_id
       );
       // wait for two confirmations
       await tx.wait(2);
       // refresh page or something, just make sure new owner shows and all
+      toast("success", "Bought NFT successfully");
+      setBuySellModal(false);
     } catch (error) {
       console.log(error);
       // handle error, a generic message showing item couldn't be bought works
@@ -86,41 +129,47 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
 
   const router = useRouter();
 
-  const tokens = [
-    {
-      name: "ONE",
-      address: "0x0000000000000000000000000000000000000000",
-      decimals: 18,
-    },
-    {
-      name: "USDT",
-      address: "0x51f68cd4eba5afb92899871b0a46da51f9808b90",
-      decimals: 18,
-    },
-  ];
-
   // @akindeji
-  const onSellClick = async () => {
+  const onSellClick = async ({
+    price,
+    tokenAddress,
+  }: {
+    price: number;
+    tokenAddress: string;
+  }) => {
     // remember to check if the user is connected
     if (isDisconnected) return;
     // remember to disable clicking on pressing the button, can enable it in finally block
+    setSellLoading(true);
     try {
+      const contract = nftContract(id, provider);
+      const r = await contract.getApproved(token_id);
+      if (r !== MARKETPLACE_ADDRESS) {
+        const tx = await contract.approve(MARKETPLACE_ADDRESS, token_id);
+        await tx.wait(2);
+      }
+      console.log(r);
       const tx = await marketContract(provider).listNft(
         // put the actual nft contract address
-        "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        id,
         // put the actual nft id
-        1,
+        token_id,
         // put actual price (100 in this case), then use selected token decimals, although it's the same for the 2 tokens
-        100 * Math.pow(10, tokens[0].decimals),
+        ethers.utils.parseEther(`${price}`),
         // put selected token address as currency
-        tokens[0].address,
+        tokenAddress,
         // put actual deadline timestamp
-        1666636922
+        parseInt((new Date(Date.now() + 12096e5).getTime() / 1000).toFixed(0))
       );
       // wait for two confirmations
       await tx.wait(2);
       // refresh page or something, just make sure new owner shows and all
+      setSellLoading(false);
+      console.log(tx);
+      toast("success", "Listed NFT successfully");
+      setBuySellModal(false);
     } catch (error) {
+      setSellLoading(false);
       console.log(error);
       // handle error, a generic message showing item couldn't be bought works
     }
@@ -134,11 +183,26 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
     // owner and currency are addresses, price and deadline are numbers
     const nftInfo = await marketContract(provider).nftInfos(
       // put actual nft contract address
-      "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      id,
       // put actual nft id
-      1
+      token_id
     );
+    setPrice(nftInfo.price.div(ethers.utils.parseEther("1")).toNumber());
+    setDeadline(nftInfo.deadline.toNumber());
+    setCurrency(nftInfo.currency);
   };
+  getNftInfo();
+
+  useEffect(() => {
+    if (ownerAddress && address) {
+      ownerAddress === address && setMode("sell");
+    } else if (
+      parseInt((new Date(Date.now() + 12096e5).getTime() / 1000).toFixed(0)) >
+      deadline
+    ) {
+      setMode("buy");
+    }
+  }, [ownerAddress, address, deadline]);
 
   return (
     <div>
@@ -156,34 +220,41 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
               id={id}
               tokenId={token_id}
               button={
-                <ItemViewButton
-                  bgImage={
-                    mode === "buy"
-                      ? "linear-gradient(45deg, #00AEE9 6.89%, #0AF190 93.89%)"
-                      : "linear-gradient(45deg, #E23B49 6.89%, #8084DC 93.89%)"
-                  }
-                  mb="46px"
-                  onClick={() => setBuySellModal(true)}
-                >
-                  {mode === "buy" ? "Buy now" : "Sell Item"}
-                </ItemViewButton>
+                isLoadingUsers ? (
+                  <ItemViewButtonSkeleton shape="square" />
+                ) : mode ? (
+                  <ItemViewButton
+                    bgImage={
+                      mode === "buy"
+                        ? "linear-gradient(45deg, #00AEE9 6.89%, #0AF190 93.89%)"
+                        : "linear-gradient(45deg, #E23B49 6.89%, #8084DC 93.89%)"
+                    }
+                    mb="46px"
+                    onClick={() => setBuySellModal(true)}
+                  >
+                    {mode === "buy" ? "Buy now" : "Sell Item"}
+                  </ItemViewButton>
+                ) : null
               }
-              creatorName={"Name"}
+              creatorName={collectionData?.name ?? ""}
               description={tokenMetaData.data.description ?? ""}
-              ownerName={collectionData?.name ?? ""}
+              ownerName={ownerName}
+              creatorImage={collectionData?.image ?? ""}
               itemName={tokenMetaData.data.name ?? ""}
               itemImage={tokenMetaData.data.image ?? ""}
+              currency={currency}
+              price={price}
             />
             <HeadingThree mb="45px">More from this collection</HeadingThree>
-            {isLoadingCollections || !collectionsData ? null : (
+            {isLoadingCollectionMetaData || !collectionMetaData ? null : (
               <FlexibleDiv gap="24px" flexDir="column">
                 <Row gutter={{ md: 24, lg: 24 }}>
-                  {collectionsData.items
+                  {collectionMetaData.tokens
                     .slice(0, 4)
-                    .map(({ contract_address, token_id }) => (
+                    .map(({ data: tokenData, id: tokenId }, i) => (
                       <Link
-                        key={token_id}
-                        href={`/items/${contract_address}?token_id=${token_id}`}
+                        key={tokenId}
+                        href={`/items/${id}?token_id=${tokenId}`}
                       >
                         <Col
                           xs={{ span: 24 }}
@@ -191,7 +262,11 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
                           lg={{ span: 8 }}
                           xl={{ span: 6 }}
                         >
-                          <ItemCard id={contract_address} tokenId={token_id} />
+                          <ItemCard
+                            name={collectionData?.name ?? ""}
+                            id={id}
+                            tokenId={tokenId}
+                          />
                         </Col>
                       </Link>
                     ))}
@@ -217,88 +292,147 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
           setModalOpen={setBuySellModal}
         >
           {mode === "buy" ? (
-            <FlexibleDiv
-              margin="0 0 50px 0"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <StyledItemViewContentText>Price</StyledItemViewContentText>
+            <>
               <FlexibleDiv
-                gap="6px"
-                flexDir="column"
-                justifyContent="space-between"
-              >
-                <StyledItemViewContentText as="p">
-                  Balance: 10,000 ONE
-                </StyledItemViewContentText>
-                <FlexibleDiv gap="6px" justifyContent="flex-start">
-                  <Harmony width="17px" height="17px" className="small" />
-                  <HeadingFour>145</HeadingFour>
-                  <StyledItemViewContentText as="p">
-                    $20.56
-                  </StyledItemViewContentText>
-                </FlexibleDiv>
-              </FlexibleDiv>
-            </FlexibleDiv>
-          ) : (
-            <FlexibleDiv
-              margin="0 0 50px 0"
-              justifyContent="stretch"
-              alignItems="stretch"
-              flexDir="column"
-              gap="20px"
-            >
-              <FlexibleDiv
-                margin="0 0 20px 0"
+                margin="0 0 50px 0"
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <StyledItemViewContentText>
-                  Current Price
-                </StyledItemViewContentText>
-                <FlexibleDiv gap="6px" justifyContent="flex-start">
-                  <Harmony width="17px" height="17px" className="small" />
-                  <HeadingFour>2751.36</HeadingFour>
-                  <StyledItemViewContentText as="p">
-                    $50.34
-                  </StyledItemViewContentText>
+                <StyledItemViewContentText>Price</StyledItemViewContentText>
+                <FlexibleDiv
+                  gap="6px"
+                  flexDir="column"
+                  justifyContent="space-between"
+                >
+                  {/* <StyledItemViewContentText as="p">
+                    Balance: 10,000 ONE
+                  </StyledItemViewContentText> */}
+                  {price ? (
+                    <FlexibleDiv gap="6px" justifyContent="flex-start">
+                      {tokens?.find(({ address }) => address === currency)
+                        ?.name === "ONE" ? (
+                        <Harmony width="17px" height="17px" className="small" />
+                      ) : tokens?.find(({ address }) => address === currency)
+                          ?.name === "USDT" ? (
+                        <USDT width="17px" height="17px" className="small" />
+                      ) : null}
+                      <HeadingFour>{price}</HeadingFour>
+                      {/* <StyledItemViewContentText as="p">
+                      $20.56
+                    </StyledItemViewContentText> */}
+                    </FlexibleDiv>
+                  ) : null}
                 </FlexibleDiv>
               </FlexibleDiv>
-              <FlexibleDiv alignItems="center" justifyContent="space-between">
-                <StyledItemViewContentText>
-                  Listing Price
-                </StyledItemViewContentText>
-                <ItemViewInput
-                  border="2px solid #3D405C"
-                  value="10,000"
-                  prefix={
-                    <ItemViewSelect
-                      height="15px"
-                      options={[{ value: "ONE", label: "ONE" }]}
-                    />
-                  }
-                />
-                {/* <FlexibleDiv gap="6px" justifyContent="flex-start">
+              <ItemViewModalButton
+                htmlType="submit"
+                bgImage="linear-gradient(45deg, #00AEE9 6.89%, #0AF190 93.89%)"
+                width="100%"
+                onClick={onBuyClick}
+              >
+                Buy now
+              </ItemViewModalButton>
+            </>
+          ) : (
+            <Form
+              // form={form}
+              name="sell-nft"
+              autoComplete="off"
+              layout="vertical"
+              requiredMark={false}
+              onFinish={(values: { price: string; token: string }) => {
+                console.log(values);
+                onSellClick({
+                  price: parseInt(values.price),
+                  tokenAddress: values.token,
+                });
+              }}
+            >
+              <FlexibleDiv
+                margin="0 0 50px 0"
+                justifyContent="stretch"
+                alignItems="stretch"
+                flexDir="column"
+                gap="20px"
+              >
+                {price ? (
+                  <FlexibleDiv
+                    margin="0 0 20px 0"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <StyledItemViewContentText>
+                      Current Price
+                    </StyledItemViewContentText>
+                    <FlexibleDiv gap="6px" justifyContent="flex-start">
+                      {tokens?.find(({ address }) => address === currency)
+                        ?.name === "ONE" ? (
+                        <Harmony width="17px" height="17px" className="small" />
+                      ) : tokens?.find(({ address }) => address === currency)
+                          ?.name === "USDT" ? (
+                        <USDT width="17px" height="17px" className="small" />
+                      ) : null}
+                      <HeadingFour>{price ?? ""}</HeadingFour>
+                      {/* <StyledItemViewContentText as="p">
+                      $50.34
+                    </StyledItemViewContentText> */}
+                    </FlexibleDiv>
+                  </FlexibleDiv>
+                ) : null}
+                <FlexibleDiv alignItems="center" justifyContent="space-between">
+                  <StyledItemViewContentText>
+                    Listing Price
+                  </StyledItemViewContentText>
+                  <FlexibleDiv>
+                    <ItemFormSelect
+                      name="token"
+                      rules={[
+                        {
+                          required: true,
+                          message: "This field is required",
+                        },
+                      ]}
+                    >
+                      <ItemViewSelect
+                        options={tokens.map(({ name, address, svg }) => ({
+                          label: svg,
+                          value: address,
+                        }))}
+                      />
+                    </ItemFormSelect>
+                    <ItemFormInput
+                      name="price"
+                      rules={[
+                        { required: true, message: "This field is required" },
+                        {
+                          required: true,
+                          message: "Enter a number",
+                          pattern: new RegExp(/^[0-9]+$/),
+                        },
+                      ]}
+                    >
+                      <ItemViewInput border="2px solid #3D405C" />
+                    </ItemFormInput>
+                  </FlexibleDiv>
+                  {/* <FlexibleDiv gap="6px" justifyContent="flex-start">
                   <Harmony width="17px" height="17px" className="small" />
                   <HeadingFour>2751.36</HeadingFour>
                   <StyledItemViewContentText as="p">
                     $50.34
                   </StyledItemViewContentText>
                 </FlexibleDiv> */}
+                </FlexibleDiv>
               </FlexibleDiv>
-            </FlexibleDiv>
+              <ItemViewModalButton
+                htmlType="submit"
+                bgImage="linear-gradient(45deg, #E23B49 6.89%, #8084DC 93.89%)"
+                width="100%"
+                loading={sellLoading}
+              >
+                Sell Item
+              </ItemViewModalButton>
+            </Form>
           )}
-          <ItemViewModalButton
-            bgImage={
-              mode === "buy"
-                ? "linear-gradient(45deg, #00AEE9 6.89%, #0AF190 93.89%)"
-                : "linear-gradient(45deg, #E23B49 6.89%, #8084DC 93.89%)"
-            }
-            width="100%"
-            onClick={mode === "buy" ? onBuyClick : () => console.log("sell")}
-          >
-            {mode === "buy" ? "Buy now" : "Sell Item"}
-          </ItemViewModalButton>
         </Modal>
       </MainLayout>
     </div>
