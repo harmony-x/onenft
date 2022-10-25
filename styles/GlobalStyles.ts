@@ -111,6 +111,9 @@ export const GlobalStyles = createGlobalStyle`
     gap: 5px;
     padding: 10px 16px;
   }
+  .ant-row {
+    width: 100%;
+  }
 
   /* @media (prefers-color-scheme: dark) {
     html {
