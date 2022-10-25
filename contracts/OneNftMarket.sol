@@ -32,7 +32,6 @@ contract OneNftMarket is Ownable {
             "You don't own this NFT"
         );
         // approve the nft to be transferred by this contract
-        IERC721(nftAddress).approve(address(this), nftId);
         nftInfos[nftAddress][nftId] = NftItemInfo({
             owner: msg.sender,
             price: price,
@@ -44,9 +43,6 @@ contract OneNftMarket is Ownable {
     function buyNft(address nftAddress, uint256 nftId) public payable {
         NftItemInfo storage nftInfo = nftInfos[nftAddress][nftId];
         require(nftInfo.deadline > block.timestamp, "NFT listing is expired");
-
-        // delete the nft info
-        delete nftInfos[nftAddress][nftId];
 
         // transfer the nft to the buyer
         IERC721(nftAddress).safeTransferFrom(nftInfo.owner, msg.sender, nftId);
@@ -93,6 +89,9 @@ contract OneNftMarket is Ownable {
                 );
             }
         }
+
+        // delete the nft info
+        delete nftInfos[nftAddress][nftId];
     }
 
     // set the royalty percent for a contract, contract owner can call this

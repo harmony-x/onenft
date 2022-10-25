@@ -114,7 +114,11 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
         // put actual nft contract address
         id,
         // put actual nft id
-        token_id
+        token_id,
+        // put actual price
+        {
+          value: ethers.utils.parseEther(price.toString()),
+        }
       );
       // wait for two confirmations
       await tx.wait(2);
