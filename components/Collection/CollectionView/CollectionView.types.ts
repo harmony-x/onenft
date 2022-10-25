@@ -1,4 +1,6 @@
+import { Collection } from "$utils/api";
+
 export interface ICollectionviewProps {
-  name?: string;
-  id: string;
+  collection?: Collection;
+  isLoading: boolean;
 }
