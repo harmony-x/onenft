@@ -3,7 +3,7 @@ import { Input } from "$components/App/Input/Input.styles";
 import { Select } from "$components/App/Select/Select.styles";
 import { FlexibleDiv } from "$components/Box/Box.styles";
 import { BREAKPOINTS } from "$constants/breakpoints";
-import { Tabs } from "antd";
+import { Form, Skeleton, Tabs } from "antd";
 import styled from "styled-components";
 import { IStyledItemViewContentTextProps } from "./ItemView.types";
 
@@ -29,6 +29,7 @@ export const StyledItemViewImage = styled.div`
   border-radius: 30px;
   img {
     border-radius: 30px;
+    object-fit: cover;
   }
   @media screen and (${BREAKPOINTS.md}) {
     width: 46%;
@@ -187,7 +188,7 @@ export const ItemViewPrice = styled(FlexibleDiv)`
 export const ItemViewInput = styled(Input)`
   height: 25px;
   padding: 10px 11px;
-  width: 60%;
+  /* width: 60%; */
   max-width: 300px;
   .ant-input-prefix {
     margin-right: 0;
@@ -198,13 +199,39 @@ export const ItemViewInput = styled(Input)`
 `;
 
 export const ItemViewSelect = styled(Select)`
-  width: 100%;
-  height: 20px;
+  /* width: 40%; */
+  height: 25px;
   padding: 6px 7px;
   max-width: 200px;
   border: 0;
   border-radius: 0;
+  &:not(.ant-select-customize-input) .ant-select-selector {
+    height: 35px;
+  }
   @media screen and (${BREAKPOINTS.lg}) {
-    height: 20px;
+    height: 48px;
+    &:not(.ant-select-customize-input) .ant-select-selector {
+      height: 48px;
+    }
+  }
+`;
+
+export const ItemFormSelect = styled(Form.Item)`
+  width: 30%;
+`;
+
+export const ItemFormInput = styled(Form.Item)`
+  width: 70%;
+`;
+
+export const ItemViewButtonSkeleton = styled(Skeleton.Avatar)`
+  width: 100%;
+  max-width: 185px;
+  height: 40px;
+  margin-bottom: 46px;
+  .ant-skeleton-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50px;
   }
 `;
