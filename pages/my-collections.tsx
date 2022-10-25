@@ -10,6 +10,7 @@ import { FlexibleDiv } from "$components/Box/Box.styles";
 import {
   CreateLayout,
   EmptyCollections,
+  MyCollectionsAvartarSkeleton,
   MyCollectionsButton,
 } from "$components/Create/CreateLayout/CreateLayout.styles";
 import {
@@ -66,7 +67,9 @@ const MyCollections: NextPage = () => {
           >
             Create a collection
           </MyCollectionsButton>
-          {!getProfileData?.collections.length ? (
+          {isLoadingGetProfile ? (
+            <MyCollectionsAvartarSkeleton active shape="square" />
+          ) : !getProfileData?.collections.length ? (
             <EmptyCollections>
               <FlexibleDiv flexDir="column" gap="26px">
                 <Empty />
@@ -104,13 +107,6 @@ const MyCollections: NextPage = () => {
                                 <HeadingFour mb="2px" as="p">
                                   {name ? applyEllipsis(name, 9) : ""}
                                 </HeadingFour>
-                                <StyledHotCollectionFloorPrice>
-                                  Floor price:{" "}
-                                  <StyledHotCollectionFloorPriceSVG>
-                                    <Harmony />
-                                  </StyledHotCollectionFloorPriceSVG>{" "}
-                                  100
-                                </StyledHotCollectionFloorPrice>
                               </div>
                             </a>
                           </Col>
