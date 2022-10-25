@@ -141,21 +141,23 @@ const ItemView: FC<IItemViewProps> = ({
             {ownerName ? truncateAddress(ownerName) : "..."}
           </span>
         </StyledItemViewContentText>
-        <StyledItemViewContentText mb="15px">
-          Current price
-        </StyledItemViewContentText>
         {price ? (
-          <ItemViewPrice justifyContent="flex-start">
-            {tokens?.find(({ address }) => address === currency)?.name ===
-            "ONE" ? (
-              <Harmony />
-            ) : tokens?.find(({ address }) => address === currency)?.name ===
-              "USDT" ? (
-              <USDT />
-            ) : null}
-            <HeadingFour>{price ?? ""}</HeadingFour>
-            {/* <StyledItemViewContentText as="p">$20.56</StyledItemViewContentText> */}
-          </ItemViewPrice>
+          <>
+            <StyledItemViewContentText mb="15px">
+              Current price
+            </StyledItemViewContentText>
+            <ItemViewPrice justifyContent="flex-start">
+              {tokens?.find(({ address }) => address === currency)?.name ===
+              "ONE" ? (
+                <Harmony />
+              ) : tokens?.find(({ address }) => address === currency)?.name ===
+                "USDT" ? (
+                <USDT />
+              ) : null}
+              <HeadingFour>{price ?? ""}</HeadingFour>
+              {/* <StyledItemViewContentText as="p">$20.56</StyledItemViewContentText> */}
+            </ItemViewPrice>
+          </>
         ) : null}
         {button}
         {/* Check other buy conditions here */}
