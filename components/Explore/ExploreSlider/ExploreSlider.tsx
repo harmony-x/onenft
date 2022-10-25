@@ -5,7 +5,8 @@ import { ArrowLeft } from "$svgs/arrow-left";
 import { ArrowRight } from "$svgs/arrow-right";
 import { explore } from "$utils/data";
 import { applyEllipsis } from "$utils/functions";
-import Image from "next/image";
+import { Image } from "antd";
+import Link from "next/link";
 import { useCallback, useState } from "react";
 import {
   CurrentBid,
@@ -86,46 +87,68 @@ const ExploreSlider = () => {
                   currentBid,
                   itemImage,
                   itemTitle,
-                  time,
+                  currency,
+                  id,
+                  tokenId,
                 },
                 i
               ) => (
-                <StyledExploreCard
-                  key={i}
-                  width={`${
-                    windowWidth <= 992
-                      ? outerSliderWidth
-                      : outerSliderWidth / 2 - 24
-                  }px`}
-                >
-                  <ExploreCardImage>
-                    <Image
-                      objectFit="cover"
-                      layout="fill"
-                      alt=""
-                      src={itemImage}
-                    />
-                  </ExploreCardImage>
-                  <ExploreCardInfo>
-                    <CreatorDisplay
-                      name={
-                        creatorName.length < 20
-                          ? creatorName
-                          : applyEllipsis(creatorName, 6)
-                      }
-                      img={creatorImage}
-                    />
-                    <ItemTitle>{itemTitle}</ItemTitle>
-                    <FlexibleDiv
-                      flexDir="column"
-                      alignItems="flex-start"
-                      justifyContent="flex-start"
-                    >
-                      <CurrentBid>Current Bid</CurrentBid>
-                      <ItemBid>{currentBid} ONE</ItemBid>
-                    </FlexibleDiv>
-                  </ExploreCardInfo>
-                </StyledExploreCard>
+                <Link key={i} href={`/items/${id}?token_id=${tokenId}`}>
+                  <StyledExploreCard
+                    width={`${
+                      windowWidth <= 992
+                        ? outerSliderWidth
+                        : outerSliderWidth / 2 - 24
+                    }px`}
+                    as="a"
+                  >
+                    <ExploreCardImage>
+                      <Image
+                        src={itemImage}
+                        alt=""
+                        width="100%"
+                        height="100%"
+                        placeholder={
+                          <Image
+                            alt=""
+                            preview={false}
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPkE+WrBwABHACybY9s4AAAAABJRU5ErkJggg=="
+                            width="100%"
+                            height="100%"
+                          />
+                        }
+                        preview={false}
+                      />
+                      {/* <Image
+                        objectFit="cover"
+                        layout="fill"
+                        alt=""
+                        src={itemImage}
+                      /> */}
+                    </ExploreCardImage>
+                    <ExploreCardInfo>
+                      <CreatorDisplay
+                        name={
+                          creatorName.length < 20
+                            ? creatorName
+                            : applyEllipsis(creatorName, 6)
+                        }
+                        img={creatorImage}
+                      />
+                      <ItemTitle>{itemTitle}</ItemTitle>
+                      <FlexibleDiv
+                        flexDir="column"
+                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                      >
+                        <CurrentBid>Current Price</CurrentBid>
+                        <ItemBid>
+                          {currentBid.toLocaleString()} {currency}
+                        </ItemBid>
+                      </FlexibleDiv>
+                    </ExploreCardInfo>
+                  </StyledExploreCard>
+                </Link>
               )
             )}
           </StyledExploreSliderInner>
