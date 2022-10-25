@@ -41,3 +41,13 @@ export const toTitleCase = (str: string) => {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
   });
 };
+
+const generateRandom = (arrStr: string[]) =>
+  Math.floor(Math.random() * (arrStr.length - 2));
+
+export const generateSymbol = (str: string) => {
+  const arrStr = str.split("");
+  return `${arrStr[generateRandom(arrStr)]}${
+    arrStr[generateRandom(arrStr)]
+  }${generateRandom(arrStr)}${arrStr[generateRandom(arrStr)]}`;
+};
