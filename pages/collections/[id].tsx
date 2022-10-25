@@ -4,7 +4,11 @@ import CollectionView from "$components/Collection/CollectionView/CollectionView
 import ItemCard from "$components/Items/ItemCard/ItemCard";
 import { ItemsTab } from "$components/Items/ItemsTab/ItemsTab.styles";
 import MainLayout from "$layouts/MainLayout/MainLayout";
-import { getSingleCollectionNFTs } from "$utils/api";
+import {
+  getCollection,
+  getCollectionMetaData,
+  getSingleCollectionNFTs,
+} from "$utils/api";
 import { Col, Row, Skeleton } from "antd";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
@@ -20,9 +24,10 @@ interface CollectionProps {
 
 const Collection: NextPage<CollectionProps> = ({ query: { id = "" } }) => {
   const [showMore, setShowMore] = useState<number>(8);
-  const { data, isLoading, isSuccess } = useQuery(
-    ["singleCollectionNFTs", id],
-    () => getSingleCollectionNFTs(id)
+  const { data: collectionMetaData, isLoading: isLoadingCollectionMetaData } =
+    useQuery(["collectionMetaData", id], () => getCollectionMetaData(id));
+  const { data, isLoading, isSuccess } = useQuery(["collection", id], () =>
+    getCollection({ address: id })
   );
 
   return (
@@ -33,11 +38,11 @@ const Collection: NextPage<CollectionProps> = ({ query: { id = "" } }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MainLayout>
-        {isLoading || !data ? (
+        {isLoadingCollectionMetaData || !collectionMetaData ? (
           <Skeleton active paragraph={{ rows: 10 }} />
         ) : (
           <>
-            <CollectionView id={id} name={data.items[0]?.contract_name ?? ""} />
+            <CollectionView collection={data} isLoading={isLoading} />
             <ItemsTab mb="86px">
               <ItemsTab.TabPane key="1" tab="Owned">
                 <FlexibleDiv
@@ -47,30 +52,29 @@ const Collection: NextPage<CollectionProps> = ({ query: { id = "" } }) => {
                   alignItems="center"
                 >
                   <Row gutter={{ md: 24, lg: 24 }}>
-                    {data.items
+                    {collectionMetaData.tokens
                       .slice(0, showMore)
-                      .map(
-                        ({ contract_address, token_id, contract_name }, i) => (
-                          <Link
-                            key={token_id}
-                            href={`/items/${contract_address}?token_id=${token_id}`}
+                      .map(({ data: tokenData, id: tokenId }, i) => (
+                        <Link
+                          key={id}
+                          href={`/items/${id}?token_id=${tokenId}`}
+                        >
+                          <Col
+                            xs={{ span: 24 }}
+                            md={{ span: 12 }}
+                            lg={{ span: 8 }}
+                            xl={{ span: 6 }}
                           >
-                            <Col
-                              xs={{ span: 24 }}
-                              md={{ span: 12 }}
-                              lg={{ span: 8 }}
-                              xl={{ span: 6 }}
-                            >
-                              <ItemCard
-                                id={contract_address}
-                                tokenId={token_id}
-                              />
-                            </Col>
-                          </Link>
-                        )
-                      )}
+                            <ItemCard
+                              name={data?.name ?? ""}
+                              id={id}
+                              tokenId={tokenId}
+                            />
+                          </Col>
+                        </Link>
+                      ))}
                   </Row>
-                  {data.items.length ? (
+                  {collectionMetaData.tokens.length ? (
                     <Button
                       border="1px solid rgba(5, 212, 182, 0.67)"
                       bgColor="transparent"
