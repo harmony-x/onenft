@@ -28,6 +28,7 @@ import { Category } from "$types/global";
 import toast from "$utils/toast";
 import useAuthenticate from "$hooks/useAuthenticate";
 import { useRouter } from "next/router";
+import { generateSymbol } from "$utils/functions";
 
 const CreateCollection: NextPage = () => {
   const [imageFile, setImageFile] = useState<string | null | File>("");
@@ -85,7 +86,11 @@ const CreateCollection: NextPage = () => {
             // @akindeji
             // set name of contract here
             // set symbol of contract here (try and do a 4/3 letter abbreviation from the title if possible, or something random sha)
-            const contract = await deployNftContract(signer, "Name", "Symbol");
+            const contract = await deployNftContract(
+              signer,
+              name,
+              generateSymbol(name)
+            );
             setUploading(false);
             mutatePostCollection(
               {
