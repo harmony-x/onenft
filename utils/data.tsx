@@ -270,7 +270,7 @@ export const categories: {
 ];
 
 export const accessTokenKey = "oneNFT_accessToken";
-export const MARKETPLACE_ADDRESS = "0x2617b7048C96a5348762D9Aa241E345fcc5193f8";
+export const MARKETPLACE_ADDRESS = "0x720d45aB23a02000c2d61079361Ca43417db25a9";
 
 export const tokens = [
   {
