@@ -1,7 +1,9 @@
 import { Discord } from "$svgs/discord";
+import { Harmony } from "$svgs/harmony";
 import { Medium } from "$svgs/medium";
 import { Telegram } from "$svgs/telegram";
 import { Twitter } from "$svgs/twitter";
+import { USDT } from "$svgs/usdt";
 import { Category, FooterLink, Menu, Social } from "$types/global";
 
 export const headerLinks = [
@@ -268,4 +270,19 @@ export const categories: {
 ];
 
 export const accessTokenKey = "oneNFT_accessToken";
-export const MARKETPLACE_ADDRESS = "0xEEF20045d1CC0A94D6D4Ee02dbB677FfFE45D9B9";
+export const MARKETPLACE_ADDRESS = "0x33195852538ccec893B6F511c453E37F133E0E53";
+
+export const tokens = [
+  {
+    name: "ONE",
+    address: "0x0000000000000000000000000000000000000000",
+    decimals: 18,
+    svg: <Harmony />,
+  },
+  {
+    name: "USDT",
+    address: "0x51f68CD4EBa5aFB92899871B0a46da51F9808b90",
+    decimals: 18,
+    svg: <USDT width={18} height={18} />,
+  },
+];
