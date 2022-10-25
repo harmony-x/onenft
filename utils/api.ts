@@ -172,7 +172,7 @@ export const getSingleNFTMetaData = async (address: string, token_id: string) =>
 
 export const getCollectionMetaData = async (address: string) =>
   await (
-    await oneNFTApiInstance.get<{ tokens: Token[] }>(
+    await oneNFTApiInstance.get<{ tokens: Omit<Token, "data">[] }>(
       `/api/collection/metadata?collection_address=${address}`
     )
   ).data;
