@@ -144,8 +144,10 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
     try {
       const contract = nftContract(id, provider);
       const r = await contract.getApproved(token_id);
+      console.log(r);
       if (r !== MARKETPLACE_ADDRESS) {
         const tx = await contract.approve(MARKETPLACE_ADDRESS, token_id);
+        console.log(tx);
         await tx.wait(2);
       }
       console.log(r);
@@ -197,8 +199,9 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
     if (ownerAddress && address) {
       ownerAddress === address && setMode("sell");
     } else if (
+      deadline &&
       parseInt((new Date(Date.now() + 12096e5).getTime() / 1000).toFixed(0)) >
-      deadline
+        deadline
     ) {
       setMode("buy");
     }
