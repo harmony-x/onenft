@@ -51,7 +51,7 @@ const HotCollection: FC<{ id: number; address: string }> = ({
               <HeadingFour mb="2px" as="p">
                 {data?.name ? applyEllipsis(data?.name, 9) : ""}
               </HeadingFour>
-              {!isLoading ? (
+              {/* {!isLoading ? (
                 <StyledHotCollectionFloorPrice>
                   Floor price:{" "}
                   <StyledHotCollectionFloorPriceSVG>
@@ -59,7 +59,7 @@ const HotCollection: FC<{ id: number; address: string }> = ({
                   </StyledHotCollectionFloorPriceSVG>{" "}
                   100
                 </StyledHotCollectionFloorPrice>
-              ) : null}
+              ) : null} */}
             </div>
           </a>
         </Link>
