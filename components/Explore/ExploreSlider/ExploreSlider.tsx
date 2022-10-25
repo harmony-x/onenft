@@ -104,6 +104,7 @@ const ExploreSlider = () => {
                   >
                     <ExploreCardImage>
                       <Image
+                        className="explore-image"
                         src={itemImage}
                         alt=""
                         width="100%"
