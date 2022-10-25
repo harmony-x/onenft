@@ -59,6 +59,7 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
   const [ownerName, setOwnerName] = useState<string>("");
   const [ownerAddress, setOwnerAddress] = useState<string>("");
   const [sellLoading, setSellLoading] = useState<boolean>(false);
+  const [buyLoading, setBuyLoading] = useState<boolean>(false);
   const [price, setPrice] = useState<number>(0);
   const [deadline, setDeadline] = useState<number>(0);
   const [currency, setCurrency] = useState<string>("");
@@ -109,6 +110,7 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
     // remember to check if the user is connected
     if (isDisconnected) return;
     // remember to disable clicking on pressing the button, can enable it in finally block
+    setBuyLoading(true);
     try {
       const tx = await marketContract(provider).buyNft(
         // put actual nft contract address
@@ -124,9 +126,11 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
       await tx.wait(2);
       // refresh page or something, just make sure new owner shows and all
       toast("success", "Bought NFT successfully");
+      setBuyLoading(false);
       setBuySellModal(false);
     } catch (error) {
       console.log(error);
+      setBuyLoading(false);
       // handle error, a generic message showing item couldn't be bought works
     }
   };
@@ -203,9 +207,7 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
     if (ownerAddress && address) {
       ownerAddress === address && setMode("sell");
     } else if (
-      deadline &&
-      parseInt((new Date(Date.now() + 12096e5).getTime() / 1000).toFixed(0)) >
-        deadline
+      parseInt((new Date(Date.now()).getTime() / 1000).toFixed(0)) <= deadline
     ) {
       setMode("buy");
     }
@@ -258,7 +260,7 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
                 <Row gutter={{ md: 24, lg: 24 }}>
                   {collectionMetaData.tokens
                     .slice(0, 4)
-                    .map(({ data: tokenData, id: tokenId }, i) => (
+                    .map(({ id: tokenId }, i) => (
                       <Link
                         key={tokenId}
                         href={`/items/${id}?token_id=${tokenId}`}
@@ -336,6 +338,8 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
                 bgImage="linear-gradient(45deg, #00AEE9 6.89%, #0AF190 93.89%)"
                 width="100%"
                 onClick={onBuyClick}
+                loading={buyLoading}
+                disabled={buyLoading}
               >
                 Buy now
               </ItemViewModalButton>
@@ -435,6 +439,7 @@ const Item: NextPage<ItemProps> = ({ query: { id = "", token_id = "" } }) => {
                 bgImage="linear-gradient(45deg, #E23B49 6.89%, #8084DC 93.89%)"
                 width="100%"
                 loading={sellLoading}
+                disabled={sellLoading}
               >
                 Sell Item
               </ItemViewModalButton>

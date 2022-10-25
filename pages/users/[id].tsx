@@ -35,7 +35,7 @@ const User: NextPage<UserProps> = ({ query: { id = "" } }) => {
       <MainLayout>
         <UserHero id={id} />
         <ItemsTab mb="86px">
-          <ItemsTab.TabPane key="1" tab="Owned">
+          <ItemsTab.TabPane key="1" tab="NFTs">
             <FlexibleDiv
               gap="24px"
               flexDir="column"
@@ -88,26 +88,6 @@ const User: NextPage<UserProps> = ({ query: { id = "" } }) => {
                 </FlexibleDiv>
               ) : null}
             </FlexibleDiv>
-          </ItemsTab.TabPane>
-          <ItemsTab.TabPane key="2" tab="Listed">
-            <Row gutter={{ md: 24, lg: 24 }}>
-              {[1, 2, 3].map((item) => (
-                <Col
-                  key={item}
-                  xs={{ span: 24 }}
-                  md={{ span: 12 }}
-                  lg={{ span: 8 }}
-                  xl={{ span: 6 }}
-                >
-                  {/* <ItemCard
-                    creator="Khyati"
-                    image="/primate.png"
-                    name="Ecotheraphy Pips #345 NFT"
-                    price={100}
-                  /> */}
-                </Col>
-              ))}
-            </Row>
           </ItemsTab.TabPane>
         </ItemsTab>
       </MainLayout>
