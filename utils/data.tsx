@@ -117,15 +117,15 @@ export const explore = [
     currency: "ONE",
   },
   {
-    creatorName: "ONENFT Team Member",
-    creatorImage: imageAdresses[0],
+    creatorName: "Adventure time",
+    creatorImage: imageAdresses[2],
     itemImage:
-      "https://nftstorage.link/ipfs/bafybeicqcmom7vabsbcxwfdvobs7ezn6algmz3sloccikocywy4qpaotl4/nlk.png",
-    itemTitle: "My NLK Membership",
-    currentBid: 1000,
-    id: "0xfa7E117f11F63386e541cA5969ae6F49286e5AF2",
-    tokenId: "0",
-    currency: "USDT",
+      "https://nftstorage.link/ipfs/bafybeib3mcrtpi4ahmz4reydxgprl72cje2fmkqlrwzbce367a5betg4ii/3307.jpg",
+    itemTitle: "3d Adventure",
+    currentBid: 10000,
+    id: "0xd0ca730BF83c9236265574A00C7f0B2A5db5eCCF",
+    tokenId: "4",
+    currency: "ONE",
   },
 ];
 
