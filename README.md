@@ -1,4 +1,5 @@
-This is a starter kit for EVM compatible dapps.
+# ONENFT
+This is an NFT Marketplace developed for harmony
 
 ## Getting Started
 
